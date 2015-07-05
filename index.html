@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+		*{
+			margin:0;
+			padding:0;
+		}
+		
+		#main-screen{
+		width:900px;
+		height:600px;
+		margin: 0 auto;
+		position:relative;
+	}
+	</style>
+	</head>
+	<body>
+		<div id ="main-screen"></div>
+	</body>
+	<script>
+		;(function(){
+			'use strict';
+			var mainScreen=document.getElementById('main-screen');
+			console.log(mainScreen);
+			mainScreen.style.background = 'red';
+			var dx=0;
+			var dy=0;
+						
+			function Hero(){
+				this.hero=document.createElement('div');
+				this.hero.style.width=100+'px';
+				this.hero.style.height=100+'px';
+				this.hero.style.background='green';
+				this.hero.style.top = 0;
+				this.hero.style.left=0;
+				this.hero.style.position='absolute';
+				var that=this;
+				
+				mainScreen.appendChild(this.hero);
+				};
+					
+				var move = function(dirc){
+					var dirc=dirc;
+					if(dirc===1){
+						if(dy<0){
+							dy=0;
+						}
+						dy-=10;
+						hero1.hero.style.top = dy + 'px';
+					}
+					if(dirc===2){
+						dy+=10;
+						hero1.hero.style.top = dy + 'px';
+					}
+					if(dirc===3){
+						if(dx<0){
+							dx=0;
+						}
+						dx-=10;
+						hero1.hero.style.left = dx + 'px';
+					}
+					if(dirc===4){
+						dx+=10;
+						hero1.hero.style.left= dx + 'px';
+					}
+				};
+												
+				window.onkeydown = function(event){
+					if(event.which===87){
+						move(1);
+					}
+					if(event.which===83){
+						move(2);
+					}
+					if(event.which===65){
+						move(3);
+					}
+					if(event.which===68){
+						move(4);
+					}
+				};
+				
+			var keepInFrame = function() {
+				
+			};
+			
+			keepInFrame();
+			var hero1 = new Hero();
+
+		})();
+	</script>
+</html>
