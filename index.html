@@ -6,87 +6,332 @@
 			margin:0;
 			padding:0;
 		}
+
+		.bomberman {
+			position: absolute;
+			height: 48px;
+			width: 48px;
+			background:url('hero.png');
+		}
 		
+		.gunda {
+			position: absolute;
+			height:48px;
+			width: 48px;
+			background:red;
+		}
+		
+		.block {
+			position: absolute;
+			height: 50px;
+			width: 50px;
+		}
+
+		.block1 {
+			background:url('non-destroying-tree.png') ;
+		}
+
+		.block2 {
+			background: url('destructible-tree.png');
+		}
+
+		.block3 {
+			background: green;
+			position:absolute;
+		}
+		
+		.bomb{
+			position: absolute;
+			height: 50px;
+			width: 50px;
+			background: url('bomb.png');
+		}
+
 		#main-screen{
-		width:900px;
-		height:600px;
-		margin: 0 auto;
-		position:relative;
-	}
+			width:550px;
+			height:550px;
+			margin: 0 auto;
+			background: url('background.png') repeat;
+			position:relative;
+		}
 	</style>
 	</head>
 	<body>
-		<div id ="main-screen"></div>
+		<div id ="main-screen">
+
+		</div>
 	</body>
 	<script>
 		;(function(){
 			'use strict';
-			var mainScreen=document.getElementById('main-screen');
-			console.log(mainScreen);
-			mainScreen.style.background = 'red';
-			var dx=0;
-			var dy=0;
-						
-			function Hero(){
-				this.hero=document.createElement('div');
-				this.hero.style.width=100+'px';
-				this.hero.style.height=100+'px';
-				this.hero.style.background='green';
-				this.hero.style.top = 0;
-				this.hero.style.left=0;
-				this.hero.style.position='absolute';
-				var that=this;
-				
-				mainScreen.appendChild(this.hero);
+
+			function Block() {
+
+				var that = this;
+
+				this.htmlElement = document.createElement('div');
+
+				this.x = 0;
+				this.y = 0;
+
+				this.type;
+
+				this.init = function(type, tileSheetX, tileSheetY) {
+					that.htmlElement.className = 'block block'+type;
+					that.x = tileSheetX * 50;
+					that.y = tileSheetY * 50;
+					that.htmlElement.style.left = that.x + 'px';
+					that.htmlElement.style.top = that.y + 'px';
+
+					that.type = type;
 				};
-					
-				var move = function(dirc){
-					var dirc=dirc;
-					if(dirc===1){
-						if(dy<0){
-							dy=0;
+			};
+
+			function BomberMan() {
+
+				var that = this;
+
+				this.htmlElement = document.createElement('div');
+
+				this.x = 0;
+				this.y = 0;
+				this.velocityX = 0;
+				this.velocityY = 0;
+
+				this.init = function() {
+					that.htmlElement.className = 'bomberman';
+					that.htmlElement.style.left = that.x + 'px';
+					that.htmlElement.style.top = that.y + 'px';
+
+					initKeyEvents();
+				};
+
+				this.updatePosition = function() {
+					if(that.x < 0) {
+						that.velocityX = 0;
+						that.x = 0;
+					}
+					if(that.x > 500) {
+						that.velocityX = 0;
+						that.x = 500;
+					}
+					if(that.y < 0){
+						that.velocityY = 0;
+						that.y = 0;
+					}
+					if(that.y > 500){
+						that.velocityY = 0;
+						that.y = 500;
+					}
+					that.x += that.velocityX;
+					that.y += that.velocityY;
+					// console.log(that.x);
+					that.htmlElement.style.left = that.x + 'px';
+					that.htmlElement.style.top = that.y + 'px';
+				};
+
+				//Private methods
+
+				var initKeyEvents = function() {
+					var x = that.htmlElement.style.left;
+					var y = that.htmlElement.style.top;
+					window.onkeydown = function(event){
+						console.log(event.which);
+						if(event.which===39){
+							that.velocityX = 1;
 						}
-						dy-=10;
-						hero1.hero.style.top = dy + 'px';
-					}
-					if(dirc===2){
-						dy+=10;
-						hero1.hero.style.top = dy + 'px';
-					}
-					if(dirc===3){
-						if(dx<0){
-							dx=0;
+						if(event.which===37){
+							that.velocityX = -1;
 						}
-						dx-=10;
-						hero1.hero.style.left = dx + 'px';
-					}
-					if(dirc===4){
-						dx+=10;
-						hero1.hero.style.left= dx + 'px';
-					}
+						if(event.which===40){
+							that.velocityY = 1;
+						}
+						if(event.which===38){
+							that.velocityY = -1;
+						}
+						if(event.which===87){
+							var bomb = new Bomb();
+							bomb.init(that.x,that.y);
+						}
+					};
+					window.onkeyup = function(event){
+						that.velocityX = 0;
+						that.velocityY = 0;
+					};
 				};
-												
-				window.onkeydown = function(event){
-					if(event.which===87){
-						move(1);
-					}
-					if(event.which===83){
-						move(2);
-					}
-					if(event.which===65){
-						move(3);
-					}
-					if(event.which===68){
-						move(4);
-					}
-				};
-				
-			var keepInFrame = function() {
-				
 			};
 			
-			keepInFrame();
-			var hero1 = new Hero();
+			function Enemy(){
+				var that = this;
+
+				this.htmlElement = document.createElement('div');
+
+				this.x = 0;
+				this.y = 500;
+				this.velocityX = 0;
+				this.velocityY = 0;
+
+				this.init = function() {
+					that.htmlElement.className = 'gunda';
+					that.htmlElement.style.left = that.x + 'px';
+					that.htmlElement.style.top = that.y + 'px';
+				}
+				
+				this.updatePosition = function() {
+					// if(that.x < 0) {
+						// that.velocityX = 0;
+						// that.x = 0;
+					// }
+					// if(that.x > 500) {
+						// that.velocityX = 0;
+						// that.x = 500;
+					// }
+					// if(that.y <= 500){
+						// that.velocityY = 0;
+						// that.y-=1;
+					// }
+					// if(that.y <5){
+						// that.velocityY = 0;
+						// that.y+= 1;
+					// }
+					that.y-=1;
+					that.x += that.velocityX;
+					that.y += that.velocityY;
+					that.htmlElement.style.left = that.x + 'px';
+					that.htmlElement.style.top = that.y + 'px';
+				};
+
+			};
+			
+			function Bomb(){
+				var that = this;
+
+				this.htmlElement = document.createElement('div');
+
+				this.x = 0;
+				this.y = 0;
+
+				this.init = function(x,y) {
+					that.x=x;
+					that.y=y;
+					that.htmlElement.className = 'bomb';
+					that.htmlElement.style.left = that.x + 'px';
+					that.htmlElement.style.top = that.y + 'px';
+					var gameW = new GameWorld();
+					gameW.htmlElement.appendChild(that.htmlElement);
+					
+					setInterval(explode,5000);
+				};
+				
+				var explode = function(){
+					that.htmlElement.remove();
+				}
+			};
+
+			function GameWorld() {
+
+				var that = this;
+				this.htmlElement = document.getElementById('main-screen');
+				this.mainGameLooper;
+
+				this.bomberMan;
+				this.enemy;
+				this.blocks = [];
+
+				var level1TileMapInfo = [
+					[0,0,0,0,2,0,0,0,0,0],
+					[0,1,0,1,0,1,0,1,0,1],
+					[0,0,0,0,0,0,0,0,0,0],
+					[0,1,0,1,0,1,0,1,0,1],
+					[0,0,2,0,0,0,0,0,0,0],
+					[0,1,0,1,0,1,0,1,0,1],
+					[0,0,0,0,0,0,0,0,2,0],
+					[0,1,0,1,0,1,0,1,0,1],
+					[0,0,0,0,0,0,2,0,0,0],
+					[0,1,0,1,0,1,0,1,0,1]
+					// [0,1,0,1,2,2,0,0,0,0],
+					// [0,1,0,0,0,0,0,0,0,0],
+					// [0,0,1,0,0,0,0,0,0,0],
+					// [0,0,0,1,0,0,0,0,0,0],
+					// [0,0,0,0,1,0,0,0,0,0],
+					// [0,0,0,1,0,0,0,0,0,0],
+					// [0,0,1,0,0,1,0,0,0,0],
+					// [0,0,0,2,0,0,0,0,0,0],
+					// [0,0,0,0,0,2,0,0,0,0],
+					// [0,0,0,0,0,0,0,0,0,0]
+				];
+
+				this.init = function() {
+					generateTileMap(level1TileMapInfo);
+					that.bomberMan = new BomberMan();
+					that.bomberMan.init();
+					that.enemy = new Enemy();
+					that.enemy.init();
+					that.htmlElement.appendChild(that.bomberMan.htmlElement);
+					that.htmlElement.appendChild(that.enemy.htmlElement);
+					this.mainGameLooper = setInterval(mainGameLoop, 15);
+				};
+
+				// Private Methods
+
+				var mainGameLoop = function() {
+					var bomberInitX = that.bomberMan.x;
+					var bomberInitY = that.bomberMan.y;
+					that.bomberMan.updatePosition();
+					
+					var enemyInitX = that.enemy.x;
+					var enemyInitY = that.enemy.y;
+					that.enemy.updatePosition();
+					
+					for(var i=0; i< that.blocks.length; i++) {
+						//if collided with block place is back to origin position
+						if(checkCollision(that.bomberMan, that.blocks[i])) {
+							console.log("here");
+							that.bomberMan.x = bomberInitX;
+							that.bomberMan.y = bomberInitY;
+							that.bomberMan.velocityX = 0;
+							that.bomberMan.velocityY = 0;
+							that.bomberMan.updatePosition();
+						}
+						
+						if(checkCollision(that.enemy, that.blocks[i])) {
+							that.enemy.x = enemyInitX;
+							that.enemy.y = enemyInitY;
+							that.enemy.velocityX = 0;
+							that.enemy.velocityY = 0;
+							// that.enemy.updatePosition();
+						}
+					}
+				};
+
+				var checkCollision = function(object1, object2) {
+					if ((object1.x + 47) > object2.x && object1.x<=(object2.x+47)
+					&& (object1.y+47) > object2.y && object1.y<= (object2.y+47)) {
+						return true;
+					}
+					else {
+						return false;
+					}
+				};
+				
+
+				var generateTileMap = function(tileMap) {
+					for(var i = 0; i<tileMap.length; i++) {
+						for(var j = 0; j<tileMap[i].length; j++) {
+							if(tileMap[i][j] != 0) {
+								var block = new Block();
+								block.init(tileMap[i][j],i,j);
+								that.blocks.push(block);
+								that.htmlElement.appendChild(block.htmlElement);
+							}
+						}
+					}
+				};
+
+			};
+
+			var gameWorld = new GameWorld();
+			gameWorld.init();
 
 		})();
 	</script>
