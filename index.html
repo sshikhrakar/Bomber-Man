@@ -9,16 +9,16 @@
 
 		.bomberman {
 			position: absolute;
-			height: 48px;
-			width: 48px;
+			height: 50px;
+			width: 50px;
 			background:url('hero.png');
 		}
 		
 		.gunda {
 			position: absolute;
-			height:48px;
-			width: 48px;
-			background:red;
+			height:50px;
+			width: 50px;
+			background:url('enemy.png');
 		}
 		
 		.block {
@@ -28,18 +28,21 @@
 		}
 
 		.block1 {
-			background:url('non-destroying-tree.png') ;
+			background:url('green.png') ;
 		}
 
 		.block2 {
-			background: url('destructible-tree.png');
+			background: url('box.png');
 		}
 
 		.block3 {
-			background: green;
+			background: url('wall.png');
 			position:absolute;
 		}
-		
+		.block4 {
+			background: url('left-wall.png');
+			position:absolute;
+		}
 		.bomb{
 			position: absolute;
 			height: 50px;
@@ -48,17 +51,17 @@
 		}
 
 		#main-screen{
-			width:500px;
-			height:500px;
+			width:550px;
+			height:550px;
 			margin: 0 auto;
-			background: url('background.png') repeat;
+			background: url('bg.png') repeat;
 			position:relative;
 		}
 	</style>
 	</head>
 	<body>
 		<div id ="main-screen">
-
+			<canvas id="canvas" width="550" height="550"></canvas>
 		</div>
 	</body>
 	<script>
@@ -93,8 +96,8 @@
 
 				this.htmlElement = document.createElement('div');
 
-				this.x = 0;
-				this.y = 0;
+				this.x = 50;
+				this.y = 50;
 				this.velocityX = 0;
 				this.velocityY = 0;
 
@@ -106,21 +109,21 @@
 				};
 
 				this.updatePosition = function() {
-					if(that.x < 0) {
+					if(that.x < 50) {
 						that.velocityX = 0;
-						that.x = 0;
+						that.x = 50;
 					}
-					if(that.x > 500) {
+					if(that.x > 450) {
 						that.velocityX = 0;
-						that.x = 500;
+						that.x = 450;
 					}
-					if(that.y < 0){
+					if(that.y < 50){
 						that.velocityY = 0;
-						that.y = 0;
+						that.y = 50;
 					}
-					if(that.y > 500){
+					if(that.y > 450){
 						that.velocityY = 0;
-						that.y = 500;
+						that.y = 450;
 					}
 					that.x += that.velocityX;
 					that.y += that.velocityY;
@@ -137,16 +140,16 @@
 					window.onkeydown = function(event){
 						// console.log(event.which);
 						if(event.which===39){
-							that.velocityX = 5;
+							that.velocityX = 50;
 						}
 						if(event.which===37){
-							that.velocityX = -5;
+							that.velocityX = -50;
 						}
 						if(event.which===40){
-							that.velocityY = 5;
+							that.velocityY = 50;
 						}
 						if(event.which===38){
-							that.velocityY = -5;
+							that.velocityY = -50;
 						}
 						if(event.which===87){
 							var bomb = new Bomb();
@@ -160,13 +163,13 @@
 				};
 			};
 			
-			function Enemy(){
+			function Enemy(x,y){
 				var that = this;
 
 				this.htmlElement = document.createElement('div');
 
-				this.x = 0;
-				this.y = 450;
+				this.x = x;
+				this.y = y;
 				this.velocityX = 0;
 				this.velocityY = 0;
 
@@ -178,61 +181,53 @@
 				this.path=[];
 				this.pathCounter=0;
 				this.updatePosition = function(path) {
-					var nextTargetX;
-					var nextTargetY;
 					var cord = path[that.pathCounter];
-					nextTargetX = cord[0]*50;
-					nextTargetY = cord[1]*50;
+					var nextTargetX = cord[0]*50;
+					var nextTargetY = cord[1]*50;
 					// delaythis(that.pathCounter);
 					
-					// console.log(nextTargetX);
-					// console.log(nextTargetY);
-					// if(nextTargetX===that.x){
-						// that.x=nextTargetX;
-					// }
-					// else{
-						// that.x+=1;
-					// }
-					// if(nextTargetY===that.y){
-					// that.y=nextTargetY;
-					// }
-					// else{
-						// that.y+=1;
-					// }
-					// if(that.x>nextTargetX && that.y>nextTargetY){
-					// setInterval(function delaythis(a){
-						// that.pathCounter=a;
+					if (that.pathCounter > 0) {
+						var prevCord = path[that.pathCounter - 1];
+						var prevCordX=prevCord[0]*50;
+						var prevCordY=prevCord[1]*50;
+						//check if x has changed
+						
+						if (nextTargetX === prevCordX) {
+							//change Y							
+							if (nextTargetY>prevCordY){
+								that.y+=5;
+							}
+							else if (nextTargetY<prevCordY){
+								that.y-= 5;
+							}
+							if (that.y === nextTargetY){
+								that.pathCounter++;
+							}
+							
+						} else if (nextTargetY === prevCordY) {
+							//change X
+							if (nextTargetX>prevCordX){
+								that.x+=5;
+							}
+							else if (nextTargetX<prevCordX){
+								that.x-= 5;
+							}
+							
+							if (that.x === nextTargetX){
+								that.pathCounter++;
+							}
+						}
+					} else {
 						that.pathCounter++;
-					// }
-					// if(that.x < 0) {
-						// that.velocityX = 0;
-						// that.x = 0;
-					// }
-					// if(that.x > 500) {
-						// that.velocityX = 0;
-						// that.x = 500;
-					// }
-					// if(that.y <= 500){
-						// that.velocityY = 0;
-						// that.y-=1;
-					// }
-					// if(that.y <5){
-						// that.velocityY = 0;
-						// that.y+= 1;
-					// }
-					// that.y-=1;
-					// for(var i=0;i<path.length;i++){
-						// for(var j=0;j<path[i].length;j++){
-							// dummy=path[i];
-							// console.log(dummy);
-						// }
-					// }
+					}
 					
-					// console.log(path);
-					that.x =nextTargetX;
-					that.y = nextTargetY;
+					
+					//that.x = nextTargetX;
+					//that.y = nextTargetY;
 					that.htmlElement.style.left = that.x + 'px';
 					that.htmlElement.style.top = that.y + 'px';
+					
+					//that.pathCounter++;
 				};
 
 			};
@@ -275,16 +270,18 @@
 				
 
 				var level1TileMapInfo = [
-					[0,0,0,0,2,0,0,0,0,0],
-					[0,1,0,1,0,1,0,1,0,1],
-					[0,0,0,0,0,0,0,0,0,0],
-					[0,1,0,1,0,1,0,1,0,1],
-					[0,0,2,0,0,0,0,0,0,0],
-					[0,1,0,1,0,1,0,1,0,1],
-					[0,0,0,0,0,0,0,0,2,0],
-					[0,1,0,1,0,1,0,1,0,1],
-					[0,0,0,0,0,0,2,0,0,0],
-					[0,1,0,1,0,1,0,1,0,1]
+					[4,4,4,4,4,4,4,4,4,4,3],
+					[3,0,0,0,0,2,0,0,0,0,3],
+					[3,0,1,0,1,0,1,0,1,0,3],
+					[3,0,0,0,0,0,0,0,0,0,3],
+					[3,0,1,0,1,0,1,2,1,0,3],
+					[3,0,0,2,0,0,0,0,0,0,3],
+					[3,0,1,0,1,0,1,0,1,0,3],
+					[3,0,0,0,0,0,0,0,0,2,3],
+					[3,0,1,0,1,0,1,0,1,0,3],
+					[3,0,0,0,0,0,2,0,0,0,3],
+					[4,4,4,4,4,4,4,4,4,4,3]
+					
 					// [0,1,0,1,2,2,0,0,0,0],
 					// [0,1,0,0,0,0,0,0,0,0],
 					// [0,0,1,0,0,0,0,0,0,0],
@@ -301,37 +298,39 @@
 					generateTileMap(level1TileMapInfo);
 					that.bomberMan = new BomberMan();
 					that.bomberMan.init();
-					that.enemy = new Enemy();
+					that.enemy = new Enemy(50,450);
+					that.enemy2 = new Enemy(450,450);
 					that.enemy.init();
+					that.enemy2.init();
 					that.htmlElement.appendChild(that.bomberMan.htmlElement);
 					that.htmlElement.appendChild(that.enemy.htmlElement);
+					that.htmlElement.appendChild(that.enemy2.htmlElement);
 					this.mainGameLooper = setInterval(mainGameLoop, 100);
-					
-					
 				};
 				
-					
 				// Private Methods
 				
 				var mainGameLoop = function() {
 					var bomberInitX = that.bomberMan.x;
 					var bomberInitY = that.bomberMan.y;
+					var prevBomberCordX = bomberInitX;
+					var prevBomberCordY = bomberInitY;
 					that.bomberMan.updatePosition();
 					
-					var enemyInitX = that.enemy.x;
+ 					var enemyInitX = that.enemy.x;
 					var enemyInitY = that.enemy.y;
 					// that.enemy.updatePosition();
+					var bomberCordX=bomberInitX/50;
+					var bomberCordY=bomberInitY/50;
+					//that.enemy.updatePosition(pathValues([1,8],[4,5]));
+					that.enemy2.updatePosition(pathValues([9,9],[4,5]));
 					
-					var pathStart = [0,9];
-					var pathEnd=[5,2];
-					var path = findPath(level1TileMapInfo,pathStart,pathEnd);
-					that.enemy.updatePosition(path);
 					//console.log(path);
 					
 					for(var i=0; i< that.blocks.length; i++) {
 						//if collided with block place is back to origin position
 						if(checkCollision(that.bomberMan, that.blocks[i])) {
-							console.log("here");
+							// console.log("here");
 							that.bomberMan.x = bomberInitX;
 							that.bomberMan.y = bomberInitY;
 							that.bomberMan.velocityX = 0;
@@ -344,14 +343,19 @@
 							that.enemy.y = enemyInitY;
 							that.enemy.velocityX = 0;
 							that.enemy.velocityY = 0;
-							// that.enemy.updatePosition();
+							that.enemy.updatePosition();
 						}
 					}
 				};
-
+				
+				var pathValues = function(start,end){
+						var path = findPath(level1TileMapInfo,start,end);
+						return path;
+				};
+				
 				var checkCollision = function(object1, object2) {
-					if ((object1.x + 43) > object2.x && object1.x<=(object2.x+43)
-					&& (object1.y+43) > object2.y && object1.y<= (object2.y+43)) {
+					if ((object1.x + 49) > object2.x && object1.x<=(object2.x+49)
+					&& (object1.y+49) > object2.y && object1.y<= (object2.y+49)) {
 						return true;
 					}
 					else {
