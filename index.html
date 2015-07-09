@@ -5,8 +5,8 @@
 		*{
 			margin:0;
 			padding:0;
+			font-family:calibri;
 		}
-
 		.bomberman {
 			position: absolute;
 			height: 50px;
@@ -18,7 +18,6 @@
 			position: absolute;
 			height:50px;
 			width: 50px;
-			background:url('enemy.png');
 		}
 		
 		.block {
@@ -30,7 +29,6 @@
 		.block1 {
 			background:url('green.png') ;
 		}
-
 		.block2 {
 			background: url('box.png');
 		}
@@ -49,27 +47,40 @@
 			width: 50px;
 			background: url('bomb.png');
 		}
-
+		#scoreBar{
+			width:550px;
+			line-height:50px;
+			color:white;
+			background:url('score-board.png');
+			float:left;
+		}
 		#main-screen{
 			width:550px;
 			height:550px;
-			margin: 0 auto;
 			background: url('bg.png') repeat;
 			position:relative;
+			float:left;
+		}
+		#wrapper{
+			width:550px;
+			margin:0 auto;
+		display:table;
 		}
 	</style>
 	</head>
 	<body>
-		<div id ="main-screen">
-			<canvas id="canvas" width="550" height="550"></canvas>
+		<div id="wrapper">
+			<div id ="scoreBar"></div>
+			<div id ="main-screen">
+			</div>
 		</div>
 	</body>
 	<script>
 		;(function(){
 			'use strict';
-
+			var counterBomb = 1;
 			function Block() {
-
+				
 				var that = this;
 
 				this.htmlElement = document.createElement('div');
@@ -93,13 +104,14 @@
 			function BomberMan() {
 
 				var that = this;
-
+				
 				this.htmlElement = document.createElement('div');
 
 				this.x = 50;
 				this.y = 50;
 				this.velocityX = 0;
 				this.velocityY = 0;
+				this.bombLimit=3;
 
 				this.init = function() {
 					that.htmlElement.className = 'bomberman';
@@ -152,8 +164,16 @@
 							that.velocityY = -50;
 						}
 						if(event.which===87){
+							if(that.bombLimit>0 && counterBomb===1){
 							var bomb = new Bomb();
 							bomb.init(that.x,that.y);
+							that.bombLimit-=1;
+							if(that.bombLimit<0){
+								that.bombLimit=0;
+							}
+							counterBomb=0;
+							}
+							
 						}
 					};
 					window.onkeyup = function(event){
@@ -177,56 +197,121 @@
 					that.htmlElement.className = 'gunda';
 					that.htmlElement.style.left = that.x + 'px';
 					that.htmlElement.style.top = that.y + 'px';
+					that.htmlElement.style.background = 'url(enemy.png)';
+				}
+				this.type2=function(){
+					that.htmlElement.className = 'gunda';
+					that.htmlElement.style.left = that.x + 'px';
+					that.htmlElement.style.top = that.y + 'px';
+					that.htmlElement.style.background = 'url(fly_fly.png) no-repeat';
 				}
 				this.path=[];
 				this.pathCounter=0;
+				this.canMoveReverse = false;
 				this.updatePosition = function(path) {
-					var cord = path[that.pathCounter];
-					var nextTargetX = cord[0]*50;
-					var nextTargetY = cord[1]*50;
-					// delaythis(that.pathCounter);
-					
-					if (that.pathCounter > 0) {
-						var prevCord = path[that.pathCounter - 1];
-						var prevCordX=prevCord[0]*50;
-						var prevCordY=prevCord[1]*50;
-						//check if x has changed
+
+					var cord = [];
+					var nextTargetX = 0;
+					var nextTargetY = 0;
+
+					// if (that.pathCounter < path.length) {
+					if (that.canMoveReverse === false) {
 						
-						if (nextTargetX === prevCordX) {
-							//change Y							
-							if (nextTargetY>prevCordY){
-								that.y+=5;
-							}
-							else if (nextTargetY<prevCordY){
-								that.y-= 5;
-							}
-							if (that.y === nextTargetY){
-								that.pathCounter++;
-							}
+						cord = path[that.pathCounter];
+						nextTargetX = cord[0]*50;
+						nextTargetY = cord[1]*50;
+						// delaythis(that.pathCounter);
+						
+						if (that.pathCounter > 0) {
+							var prevCord = path[that.pathCounter - 1];
+							var prevCordX=prevCord[0]*50;
+							var prevCordY=prevCord[1]*50;
+							//check if x has changed
 							
-						} else if (nextTargetY === prevCordY) {
-							//change X
-							if (nextTargetX>prevCordX){
-								that.x+=5;
+							if (nextTargetX === prevCordX) {
+								//change Y							
+								if (nextTargetY>prevCordY){
+									that.y+=5;
+								}
+								else if (nextTargetY<prevCordY){
+									that.y-= 5;
+								}
+								if (that.y === nextTargetY){
+									that.pathCounter++;
+								}
+								
+							} else if (nextTargetY === prevCordY) {
+								//change X
+								if (nextTargetX>prevCordX){
+									that.x+=5;
+								}
+								else if (nextTargetX<prevCordX){
+									that.x-= 5;
+								}
+								
+								if (that.x === nextTargetX){
+									that.pathCounter++;
+								}
 							}
-							else if (nextTargetX<prevCordX){
-								that.x-= 5;
-							}
-							
-							if (that.x === nextTargetX){
-								that.pathCounter++;
-							}
+						} else {
+							that.pathCounter++;	
 						}
-					} else {
-						that.pathCounter++;
+						
+						if (that.pathCounter >= path.length) {
+							that.canMoveReverse = true;
+							that.pathCounter = path.length-1;
+						}
+						
+					}else{
+						
+						cord = path[that.pathCounter];
+						nextTargetX = cord[0]*50;
+						nextTargetY = cord[1]*50;
+						// delaythis(that.pathCounter);
+						
+						if (that.pathCounter < path.length-1) {
+							var prevCord = path[that.pathCounter + 1];
+							var prevCordX=prevCord[0]*50;
+							var prevCordY=prevCord[1]*50;
+							//check if x has changed
+							
+							if (nextTargetX === prevCordX) {
+								//change Y							
+								if (nextTargetY>prevCordY){
+									that.y+=5;
+								}
+								else if (nextTargetY<prevCordY){
+									that.y-= 5;
+								}
+								if (that.y === nextTargetY){
+									that.pathCounter--;
+								}
+								
+							} else if (nextTargetY === prevCordY) {
+								//change X
+								if (nextTargetX>prevCordX){
+									that.x+=5;
+								}
+								else if (nextTargetX<prevCordX){
+									that.x-= 5;
+								}
+								
+								if (that.x === nextTargetX){
+									that.pathCounter--;
+								}
+							}
+						} else {
+							that.pathCounter--;	
+						}
+						
+						if (that.pathCounter < 0) {
+							that.canMoveReverse = false;
+							that.pathCounter = 0;
+						}
+						
 					}
-					
-					
-					//that.x = nextTargetX;
-					//that.y = nextTargetY;
 					that.htmlElement.style.left = that.x + 'px';
 					that.htmlElement.style.top = that.y + 'px';
-					
 					//that.pathCounter++;
 				};
 
@@ -247,13 +332,14 @@
 					that.htmlElement.style.left = that.x + 'px';
 					that.htmlElement.style.top = that.y + 'px';
 					var gameW = new GameWorld();
+					console.log(that.bombLimit);
 					gameW.htmlElement.appendChild(that.htmlElement);
-					
-					setInterval(explode,5000);
+					setTimeout(explode,4000);
 				};
 				
 				var explode = function(){
 					that.htmlElement.remove();
+					counterBomb=1;
 				}
 			};
 
@@ -261,14 +347,12 @@
 
 				var that = this;
 				this.htmlElement = document.getElementById('main-screen');
+				this.scoreBoard = document.getElementById('scoreBar');
 				this.mainGameLooper;
 
 				this.bomberMan;
 				this.enemy;
 				this.blocks = [];
-				
-				
-
 				var level1TileMapInfo = [
 					[4,4,4,4,4,4,4,4,4,4,3],
 					[3,0,0,0,0,2,0,0,0,0,3],
@@ -281,17 +365,6 @@
 					[3,0,1,0,1,0,1,0,1,0,3],
 					[3,0,0,0,0,0,2,0,0,0,3],
 					[4,4,4,4,4,4,4,4,4,4,3]
-					
-					// [0,1,0,1,2,2,0,0,0,0],
-					// [0,1,0,0,0,0,0,0,0,0],
-					// [0,0,1,0,0,0,0,0,0,0],
-					// [0,0,0,1,0,0,0,0,0,0],
-					// [0,0,0,0,1,0,0,0,0,0],
-					// [0,0,0,1,0,0,0,0,0,0],
-					// [0,0,1,0,0,1,0,0,0,0],
-					// [0,0,0,2,0,0,0,0,0,0],
-					// [0,0,0,0,0,2,0,0,0,0],
-					// [0,0,0,0,0,0,0,0,0,0]
 				];
 
 				this.init = function() {
@@ -300,12 +373,24 @@
 					that.bomberMan.init();
 					that.enemy = new Enemy(50,450);
 					that.enemy2 = new Enemy(450,450);
-					that.enemy.init();
+					that.enemy3 = new Enemy(450,50);
+					that.enemy4 = new Enemy(450,250);
+					that.enemy.type2();
 					that.enemy2.init();
+					that.enemy3.init();
+					that.enemy4.type2();
+
 					that.htmlElement.appendChild(that.bomberMan.htmlElement);
 					that.htmlElement.appendChild(that.enemy.htmlElement);
 					that.htmlElement.appendChild(that.enemy2.htmlElement);
+					that.htmlElement.appendChild(that.enemy3.htmlElement);
+					that.htmlElement.appendChild(that.enemy4.htmlElement);
 					this.mainGameLooper = setInterval(mainGameLoop, 100);
+				};
+				
+				var score = function(){
+					var bombCount = that.bomberMan.bombLimit;
+					that.scoreBoard.innerHTML='Bomb Count= ' +bombCount;
 				};
 				
 				// Private Methods
@@ -316,15 +401,17 @@
 					var prevBomberCordX = bomberInitX;
 					var prevBomberCordY = bomberInitY;
 					that.bomberMan.updatePosition();
-					
+					score();
  					var enemyInitX = that.enemy.x;
 					var enemyInitY = that.enemy.y;
 					// that.enemy.updatePosition();
 					var bomberCordX=bomberInitX/50;
-					var bomberCordY=bomberInitY/50;
-					//that.enemy.updatePosition(pathValues([1,8],[4,5]));
-					that.enemy2.updatePosition(pathValues([9,9],[4,5]));
-					
+					var bomberCordY=bomberInitY/50;	
+
+					that.enemy.updatePosition(pathValues([1,9],[4,5]));
+					that.enemy2.updatePosition(pathValues([9,9],[6,3]));
+					that.enemy3.updatePosition(pathValues([9,1],[1,4]));
+					that.enemy4.updatePosition(pathValues([9,5],[4,9]));
 					//console.log(path);
 					
 					for(var i=0; i< that.blocks.length; i++) {
@@ -338,13 +425,13 @@
 							that.bomberMan.updatePosition();
 						}
 						
-						if(checkCollision(that.enemy, that.blocks[i])) {
-							that.enemy.x = enemyInitX;
-							that.enemy.y = enemyInitY;
-							that.enemy.velocityX = 0;
-							that.enemy.velocityY = 0;
-							that.enemy.updatePosition();
-						}
+						// if(checkCollision(that.enemy, that.blocks[i])) {
+							// that.enemy.x = enemyInitX;
+							// that.enemy.y = enemyInitY;
+							// that.enemy.velocityX = 0;
+							// that.enemy.velocityY = 0;
+							// that.enemy.updatePosition();
+						// }
 					}
 				};
 				
@@ -640,9 +727,6 @@
 				return calculatePath();
 			
 			} // end of findPath() function
-
-
-
 
 			var gameWorld = new GameWorld();
 			gameWorld.init();
