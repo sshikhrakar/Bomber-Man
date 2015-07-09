@@ -1,0 +1,71 @@
+@charset "utf-8";
+/* CSS Document */
+
+* {
+	margin: 0;
+	padding: 0;
+	font-family: calibri;
+}
+.bomberman {
+	position: absolute;
+	height: 50px;
+	width: 50px;
+	background: url('../images/hero.png');
+}
+.gunda1 {
+	position: absolute;
+	height: 50px;
+	width: 50px;
+	background-image: url('../images/enemy.png');
+}
+.gunda2 {
+	position: absolute;
+	height: 50px;
+	width: 50px;
+	background-image: url('../images/fly_fly.png');
+	background-repeat: no-repeat;
+}
+.block {
+	position: absolute;
+	height: 50px;
+	width: 50px;
+}
+.block1 {
+	background: url('../images/green.png');
+}
+.block2 {
+	background: url('../images/box.png');
+}
+.block3 {
+	background: url('../images/wall.png');
+	position: absolute;
+}
+.block4 {
+	background: url('../images/left-wall.png');
+	position: absolute;
+}
+.bomb {
+	position: absolute;
+	height: 50px;
+	width: 50px;
+	background: url('../images/bomb.png');
+}
+#scoreBar {
+	width: 550px;
+	line-height: 50px;
+	color: white;
+	background: url('../images/score-board.png');
+	float: left;
+}
+#main-screen {
+	width: 550px;
+	height: 550px;
+	background: url('../images/bg.png') repeat;
+	position: relative;
+	float: left;
+}
+#wrapper {
+	width: 550px;
+	margin: 0 auto;
+	display: table;
+}
