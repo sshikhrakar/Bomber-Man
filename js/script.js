@@ -630,7 +630,7 @@
         };
 
         var updateScore = function() {
-            var bombCount = that.bomberMan.bombLimit;
+            var bombCount = bombLimit;
             that.scoreBoard.innerHTML = 'Bomb Count= ' + bombCount;
         };
 
