@@ -50,6 +50,12 @@
 	width: 50px;
 	background: url('../images/bomb.png');
 }
+.explosion{
+	position:absolute;
+	height:50px;
+	width:50px;
+	background:url('../images/explosion.png');
+}
 #scoreBar {
 	width: 550px;
 	line-height: 50px;

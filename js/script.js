@@ -39,15 +39,7 @@
             that.htmlElement.className = 'bomb';
             that.htmlElement.style.left = that.x + 'px';
             that.htmlElement.style.top = that.y + 'px';
-            var gameW = new GameWorld();
-            gameW.htmlElement.appendChild(that.htmlElement);
-            setTimeout(explode, 4000);
         };
-
-        var explode = function() {
-            that.htmlElement.remove();
-            that.bombActive = false;
-        }
     };
 
     function BomberMan() {
@@ -92,7 +84,30 @@
         };
 
     };
+	function Explosion(){
+		var that = this;
 
+        this.htmlElement = document.createElement('div');
+
+        this.x;
+        this.y;
+        
+        this.init = function(x,y) {
+        	that.x=x;
+        	that.y=y;
+        	that.htmlElement.className = "explosion";	
+            that.htmlElement.style.left = that.x + 'px';
+            that.htmlElement.style.top = that.y + 'px';
+        };
+        this.clearExplosion = function(){
+        	setTimeout(clearAll,100);
+        };
+        
+        var clearAll = function(){
+        	that.htmlElement.remove();
+        }
+	}
+	
     function Enemy(x, y) {
         var that = this;
 
@@ -118,7 +133,10 @@
             that.htmlElement.style.left = that.x + 'px';
             that.htmlElement.style.top = that.y + 'px';
         }
-
+        
+        that.kill = function() {
+        	that.htmlElement.remove();
+        }
 
         this.updatePosition = function(path) {
 
@@ -513,11 +531,12 @@
         this.htmlElement = document.getElementById('main-screen');
         this.scoreBoard = document.getElementById('scoreBar');
         this.mainGameLooper;
-
         this.bomberMan;
         this.enemies = [];
         this.blocks = [];
+        this.explosions = [];
         this.bomb;
+        this.explosion;
 
         var level1TileMapInfo = [
             [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3],
@@ -588,12 +607,110 @@
                     if (bombLimit > 0 && !that.bomb.bombActive) {
                         that.bomb = new Bomb();
                         that.bomb.init(that.bomberMan.x, that.bomberMan.y);
+                        that.htmlElement.appendChild(that.bomb.htmlElement);
+                        setTimeout(explodeBomb, 4000);
                         that.bomb.bombActive = true;
                         bombLimit--;
                     }
                 }
-
             };
+     
+        var  explodeBomb = function() {
+        	that.bomb.htmlElement.remove();
+            createExplosionBoxes(that.bomb.x,that.bomb.y);
+            that.bomb.bombActive = false;
+        }
+            
+        var createExplosionBoxes = function(x,y){
+        	var rightX = x+50;
+        	var rightY = y+0;
+        	var botX = x+0;
+        	var botY = y+50;
+        	var leftX = x-50;
+        	var leftY = y+0;
+        	var topX = x+0;
+        	var topY = y-50;
+        	var midX = x+0;
+        	var midY = y+0;
+        	var bombM = new Explosion();
+        	var bombR = new Explosion();
+        	var bombB = new Explosion();
+        	var bombL = new Explosion();
+        	var bombT = new Explosion();
+        	
+        	bombM.init(midX,midY);
+        	
+        	bombR.init(rightX,rightY);
+        	
+        	bombB.init(botX,botY);
+        	
+        	bombL.init(leftX,leftY);
+        	
+        	bombT.init(topX,topY);
+        	
+        	that.htmlElement.appendChild(bombM.htmlElement);
+        	that.explosions.push(bombM);
+        	bombM.clearExplosion();
+        	
+        	if(allowExplodeCreate(bombR)) {
+    		that.htmlElement.appendChild(bombR.htmlElement);
+    		that.explosions.push(bombR);
+    		bombR.clearExplosion();
+    		}
+    		if(allowExplodeCreate(bombB)) {
+    		that.htmlElement.appendChild(bombB.htmlElement);
+    		that.explosions.push(bombB);
+    		bombB.clearExplosion();
+    		}
+    		if(allowExplodeCreate(bombL)) {
+    		that.htmlElement.appendChild(bombL.htmlElement);
+    		that.explosions.push(bombL);
+    		bombL.clearExplosion();
+    		}
+    		if(allowExplodeCreate(bombT)) {
+    		that.htmlElement.appendChild(bombT.htmlElement);
+    		that.explosions.push(bombT);
+    		bombT.clearExplosion();
+    		}	
+		 	
+		 	for(var i=0; i<that.explosions.length; i++){
+		 		for(var e=0; e<that.enemies.length; e++) {
+		 			if(checkCollision(that.explosions[i], that.enemies[e])) {
+		 				that.enemies[e].kill();
+		 				that.enemies[e] = null;
+		 			}
+		 		}
+		 		that.enemies = cleanNullFromArray(that.enemies);
+		 		
+		 		if(checkCollision(that.explosions[i], that.bomberMan)) {
+		 			alert("GAME OVER");
+		 		}
+		 		for(var j=0;j<that.blocks.length;j++){
+		 			if(checkCollision(that.explosions[i],that.blocks[j]) && that.blocks[j].type===2){
+						that.blocks[j].htmlElement.remove();
+		 			}
+		 		}
+		 	} 
+        };
+        
+        var cleanNullFromArray = function(array) {
+        	for(var i=0;i<array.length;i++){
+        		if(array[i]===null){
+        			array.splice(i,1);
+        		}	
+        	}
+        	return array;
+        }
+        
+        var allowExplodeCreate = function(explosion) {
+        	for(var i=0; i<that.blocks.length; i++) {
+        		if(checkCollision(explosion, that.blocks[i]) && that.blocks[i].type != 2) {
+        			return false;
+        			} 	
+        	}
+        	return true;
+        };
+     
             window.onkeyup = function(event) {
                 that.bomberMan.velocityX = 0;
                 that.bomberMan.velocityY = 0;
@@ -617,7 +734,7 @@
                     that.bomberMan.updatePosition();
                 }
             }
-
+			
             for (var i = 0; i < that.enemies.length; i++) {
                 that.enemies[i].updatePosition(pathValues(that.enemies[i].pathStart, that.enemies[i].pathEnd));
                 if (checkCollision(that.bomberMan, that.enemies[i])) {
@@ -627,8 +744,14 @@
             };
 
             updateScore();
+            checkEnemies();
         };
-
+		var checkEnemies=function(){
+			if(that.enemies.length===0){
+				alert("You won");
+			}
+			
+		}
         var updateScore = function() {
             var bombCount = bombLimit;
             that.scoreBoard.innerHTML = 'Bomb Count= ' + bombCount;
