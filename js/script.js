@@ -22,6 +22,10 @@
 
             that.type = type;
         };
+        
+        this.kill = function(){
+        	that.htmlElement.remove();
+        }
     };
 
     function Bomb() {
@@ -685,11 +689,14 @@
 		 		if(checkCollision(that.explosions[i], that.bomberMan)) {
 		 			alert("GAME OVER");
 		 		}
+		 		
 		 		for(var j=0;j<that.blocks.length;j++){
 		 			if(checkCollision(that.explosions[i],that.blocks[j]) && that.blocks[j].type===2){
-						that.blocks[j].htmlElement.remove();
-		 			}
+		 				that.blocks[j].kill();
+		 				that.blocks[j] = null;
+		 			}	
 		 		}
+		 		that.blocks = cleanNullFromArray(that.blocks);
 		 	} 
         };
         
