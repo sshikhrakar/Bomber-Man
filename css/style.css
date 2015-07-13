@@ -56,10 +56,24 @@
 	width:50px;
 	background:url('../images/explosion.png');
 }
+.goBack{
+	width:166px;
+	height:40px;
+	float:left;
+	margin-right:10px;
+	padding-left:4px;
+}
+.bombLimit{
+	width:166px;
+	height:40px;
+	float:left;
+	margin-left:10px;
+	padding-left:4px;
+}
 #scoreBar {
 	width: 550px;
+	height: 50px;
 	line-height: 50px;
-	color: white;
 	background: url('../images/score-board.png');
 	float: left;
 }
@@ -69,6 +83,60 @@
 	background: url('../images/bg.png') repeat;
 	position: relative;
 	float: left;
+}
+.newGame{
+	width:260px;
+	height:90px;
+	top:312px;
+	left:322px;
+	position:absolute;
+	background:url('../images/new-game-button.png');
+}
+.newGame:hover{
+	background:url('../images/new-game-hover.png');
+	cursor:pointer;
+}
+.gameOptions{
+	width:372px;
+	height:67px;
+	top:411px;
+	left:287px;
+	position:absolute;
+	background:url('../images/gameOptions.png');
+}
+.gameOptions:hover{
+	left:200px;
+	cursor:pointer;
+}
+.loading-bar{
+	width:664px;
+	height:137px;
+	position:absolute;
+	top:229px;
+	left:-590px;
+	background:url('../images/loading-bar.png');
+}
+#menu-screen{
+	width:550px;
+	height:600px;
+	position:absolute;
+	display:block;
+	overflow:hidden;
+	background:url('../images/menuscreen.png');
+}
+#loading-screen{
+	width:550px;
+	height:600px;
+	overflow:hidden;
+	display:none;
+	position:relative;
+	background:url('../images/loading-screen.png');
+}
+#game-screen{
+	width:550px;
+	height:600px;
+	display:table;
+	display:none;
 }
 #wrapper {
 	width: 550px;

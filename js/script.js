@@ -533,7 +533,8 @@
 
         var that = this;
         this.htmlElement = document.getElementById('main-screen');
-        this.scoreBoard = document.getElementById('scoreBar');
+        this.scoreBoard = document.getElementById('scoreBar').children[1];
+        this.gameScreen = document.getElementById('game-screen');
         this.mainGameLooper;
         this.bomberMan;
         this.enemies = [];
@@ -541,7 +542,10 @@
         this.explosions = [];
         this.bomb;
         this.explosion;
-
+		this.loadingScreen = document.getElementById('loading-screen');
+		this.loadingBar = document.getElementById('loading-screen').children[0];
+		this.menuScreen = document.getElementById('menu-screen');
+		
         var level1TileMapInfo = [
             [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3],
             [3, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3],
@@ -790,11 +794,40 @@
                     }
                 }
             }
-        };
-
+        };  
+	    this.mainMenu = function(){
+	    	that.menuScreen.onclick=function(){	
+	    		generateLoading();
+    		}
+   		 }
+   		 
+   		 var timer;
+   		 var generateLoading = function(){
+   		 	// setTimeout(generateLoading,2000);
+    		that.loadingScreen.style.display = 'block';
+    		that.menuScreen.style.display = 'none';
+    		timer = setInterval(generateLoadingBar,40);	
+   		 }
+   		 
+   		 var count = 0;
+   		 var update = 0;
+   		 var barLeft = -590;
+   		 var generateLoadingBar = function(){
+   		 	update =update+1;
+   		 	barLeft = barLeft+update;
+   		 	that.loadingBar.style.left=barLeft+'px';
+   		 	if(update>30)
+   		 	{
+   		 		clearInterval(timer);
+				gameWorld.init();
+   		 		that.loadingScreen.style.display = 'none';
+   		 		that.gameScreen.style.display = 'block';
+   		 		// clearInterval(that.timer);
+   		 	}
+   		 }
     };
 
-    var gameWorld = new GameWorld();
-    gameWorld.init();
+	var gameWorld = new GameWorld();
+    gameWorld.mainMenu();
 
 })();
