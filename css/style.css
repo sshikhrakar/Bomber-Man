@@ -16,7 +16,7 @@
 	position: absolute;
 	height: 50px;
 	width: 50px;
-	background: url('../images/enemy.png');
+	background: url('../images/slime-sprite.png');
 }
 .gunda2 {
 	position: absolute;
@@ -54,7 +54,7 @@
 	position:absolute;
 	height:50px;
 	width:50px;
-	background:url('../images/explosion.png');
+	background:url('../images/explosion_sprite.png');
 }
 .goBack{
 	width:166px;

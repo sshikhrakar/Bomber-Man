@@ -102,9 +102,10 @@
         	that.htmlElement.className = "explosion";	
             that.htmlElement.style.left = that.x + 'px';
             that.htmlElement.style.top = that.y + 'px';
+            animateTileSprite(that.htmlElement,31,15);
         };
         this.clearExplosion = function(){
-        	setTimeout(clearAll,100);
+        	setTimeout(clearAll,500);
         };
         
         var clearAll = function(){
@@ -136,9 +137,8 @@
             that.htmlElement.className = 'gunda' + type;
             that.htmlElement.style.left = that.x + 'px';
             that.htmlElement.style.top = that.y + 'px';
-            animateTileSprite(that.htmlElement);
-        }
-        
+            animateTileSprite(that.htmlElement,1,200);
+        } 
         that.kill = function() {
         	that.htmlElement.remove();
         }
@@ -530,24 +530,24 @@
         return calculatePath();
     };
     
-	function animateTileSprite(element) {
+	function animateTileSprite(element,noOfTiles,intervalTime) {
 		var currentSpriteX = 0;
 		var currentSpriteY = 0; 
 		element.style.backgroundPositionX = currentSpriteX + "px";
 		element.style.backgroundPositionY = currentSpriteY + "px";
 		setInterval(function() {
-		currentSpriteX += 50;
-		if(currentSpriteX > (50*2)) {
+		currentSpriteX -= 50;
+		if(currentSpriteX < (-50*noOfTiles)) {
 		currentSpriteX = 0;
-		currentSpriteY += 50;
+		// currentSpriteY -= 50;
 		}
-		if(currentSpriteY > (50*0)) {
-		currentSpriteX = 0;
-		currentSpriteY = 0;
-		}
+		// if(currentSpriteY > (50*0)) {
+		// currentSpriteX = 0;
+		// currentSpriteY = 0;
+		// }
 		element.style.backgroundPositionX = currentSpriteX + "px";
-		element.style.backgroundPositionY = currentSpriteY + "px";
-		}, 20);
+		// element.style.backgroundPositionY = currentSpriteY + "px";
+		},intervalTime);
 	};
 		
     function GameWorld() {
