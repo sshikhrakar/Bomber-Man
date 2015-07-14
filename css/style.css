@@ -16,13 +16,13 @@
 	position: absolute;
 	height: 50px;
 	width: 50px;
-	background-image: url('../images/enemy.png');
+	background: url('../images/enemy.png');
 }
 .gunda2 {
 	position: absolute;
 	height: 50px;
 	width: 50px;
-	background-image: url('../images/fly_fly.png');
+	background: url('../images/fly_fly_sprite.png');
 	background-repeat: no-repeat;
 }
 .block {

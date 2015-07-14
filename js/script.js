@@ -136,6 +136,7 @@
             that.htmlElement.className = 'gunda' + type;
             that.htmlElement.style.left = that.x + 'px';
             that.htmlElement.style.top = that.y + 'px';
+            animateTileSprite(that.htmlElement);
         }
         
         that.kill = function() {
@@ -528,7 +529,27 @@
         // that is empty if no path is possible
         return calculatePath();
     };
-
+    
+	function animateTileSprite(element) {
+		var currentSpriteX = 0;
+		var currentSpriteY = 0; 
+		element.style.backgroundPositionX = currentSpriteX + "px";
+		element.style.backgroundPositionY = currentSpriteY + "px";
+		setInterval(function() {
+		currentSpriteX += 50;
+		if(currentSpriteX > (50*2)) {
+		currentSpriteX = 0;
+		currentSpriteY += 50;
+		}
+		if(currentSpriteY > (50*0)) {
+		currentSpriteX = 0;
+		currentSpriteY = 0;
+		}
+		element.style.backgroundPositionX = currentSpriteX + "px";
+		element.style.backgroundPositionY = currentSpriteY + "px";
+		}, 20);
+	};
+		
     function GameWorld() {
 
         var that = this;
