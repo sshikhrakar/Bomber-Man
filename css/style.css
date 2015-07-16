@@ -23,7 +23,25 @@
 	height: 50px;
 	width: 50px;
 	background: url('../images/fly_fly_sprite.png');
+}
+.gunda3 {
+	position: absolute;
+	height: 50px;
+	width: 50px;
+	background: url('../images/mine.png');
+}
+.coin{
+	position: absolute;
+	height: 50px;
+	width: 50px;
+	background: url('../images/coin.png');
 	background-repeat: no-repeat;
+}
+.power-up{
+	position: absolute;
+	height: 50px;
+	width: 50px;
+	background: url('../images/power-up.png');
 }
 .block {
 	position: absolute;
@@ -68,7 +86,30 @@
 	height:40px;
 	float:left;
 	margin-left:10px;
+	margin-right:10px;
 	padding-left:4px;
+}
+.score{
+	width:166px;
+	height:40px;
+	float:left;
+	margin-left:10px;
+	padding-left:4px;
+}
+#end-screen{
+	width:550px;
+	height:600px;
+	display:none;
+	overflow:hidden;
+	position:relative;
+	background:url('../images/bg_main.png');
+}
+.result{
+	position:absolute;
+	left:163px;
+	top:124px;
+	width:224px;
+	height:67px;
 }
 #scoreBar {
 	width: 550px;
