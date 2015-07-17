@@ -1,5 +1,4 @@
-;
-(function() {
+;(function() {
     "use strict";
 
     function Block() {
@@ -22,9 +21,9 @@
 
             that.type = type;
         };
-        
-        this.kill = function(){
-        	that.htmlElement.remove();
+
+        this.kill = function() {
+            that.htmlElement.remove();
         }
     };
 
@@ -45,49 +44,49 @@
             that.htmlElement.style.top = that.y + 'px';
         };
     };
-    
-	function Coin(){
-		var that=this;
-		
-		this.htmlElement = document.createElement('div');
 
-        this.x=0;
-        this.y=0 ;
-        
-        this.init = function(x,y) {
-        	that.x=x*50;
-        	that.y=y*50;
+    function Coin() {
+        var that = this;
+
+        this.htmlElement = document.createElement('div');
+
+        this.x = 0;
+        this.y = 0;
+
+        this.init = function(x, y) {
+            that.x = x * 50;
+            that.y = y * 50;
             that.htmlElement.className = 'coin';
             that.htmlElement.style.left = that.x + 'px';
             that.htmlElement.style.top = that.y + 'px';
-            animateTileSprite(that.htmlElement,9,80);
+            animateTileSprite(that.htmlElement, 9, 80);
         };
-		this.kill = function() {
-        	that.htmlElement.remove();
+        this.kill = function() {
+            that.htmlElement.remove();
         }
-	};
-	
-	function PowerUp(){
-		var that=this;
-		
-		this.htmlElement = document.createElement('div');
+    };
 
-        this.x=0;
-        this.y=0 ;
-        
-        this.init = function(x,y) {
-        	that.x=x;
-        	that.y=y;
-        	that.htmlElement.className = 'power-up';
+    function PowerUp() {
+        var that = this;
+
+        this.htmlElement = document.createElement('div');
+
+        this.x = 0;
+        this.y = 0;
+
+        this.init = function(x, y) {
+            that.x = x;
+            that.y = y;
+            that.htmlElement.className = 'power-up';
             that.htmlElement.style.left = that.x + 'px';
             that.htmlElement.style.top = that.y + 'px';
-            animateTileSprite(that.htmlElement,9,80);
-           }
-           this.kill = function() {
-        	that.htmlElement.remove();
+            animateTileSprite(that.htmlElement, 9, 80);
         }
-	};
-	
+        this.kill = function() {
+            that.htmlElement.remove();
+        }
+    };
+
     function BomberMan() {
 
         var that = this;
@@ -130,38 +129,39 @@
         };
 
     };
-	function Explosion(){
-		var that = this;
 
-        this.htmlElement = document.createElement('div');
-
-        this.x;
-        this.y;
-        
-        this.init = function(x,y) {
-        	that.x=x;
-        	that.y=y;
-        	that.htmlElement.className = "explosion";	
-            that.htmlElement.style.left = that.x + 'px';
-            that.htmlElement.style.top = that.y + 'px';
-            animateTileSprite(that.htmlElement,31,15);
-        };
-        this.clearExplosion = function(){
-        	setTimeout(clearAll,500);
-        };
-        
-        var clearAll = function(){
-        	that.htmlElement.remove();
-        }
-	}
-	
-    function Enemy(x, y,speed) {
+    function Explosion() {
         var that = this;
 
         this.htmlElement = document.createElement('div');
 
-        this.x = x;
-        this.y = y;
+        this.x = 0;
+        this.y = 0;
+
+        this.init = function(x, y) {
+            that.x = x;
+            that.y = y;
+            that.htmlElement.className = "explosion";
+            that.htmlElement.style.left = that.x + 'px';
+            that.htmlElement.style.top = that.y + 'px';
+            animateTileSprite(that.htmlElement, 31, 50);
+        };
+        this.clearExplosion = function() {
+            setTimeout(clearAll, 100);
+        };
+
+        var clearAll = function() {
+            that.htmlElement.remove();
+        }
+    }
+
+    function Enemy(x, y, speed) {
+        var that = this;
+
+        this.htmlElement = document.createElement('div');
+
+        this.x = x * 50;
+        this.y = y * 50;
         this.velocityX = 0;
         this.velocityY = 0;
 
@@ -179,17 +179,19 @@
             that.htmlElement.className = 'gunda' + type;
             that.htmlElement.style.left = that.x + 'px';
             that.htmlElement.style.top = that.y + 'px';
-            animateTileSprite(that.htmlElement,1,200);
-            if(type===3){
-            	animateTileSprite(that.htmlElement,7,200);
+            animateTileSprite(that.htmlElement, 1, 200);
+            if (type === 3) {
+                animateTileSprite(that.htmlElement, 7, 200);
             }
-        } 
+        };
         this.kill = function() {
-        	that.htmlElement.remove();
-        }
+            that.htmlElement.remove();
+        };
 
         this.updatePosition = function(path) {
-
+            var prevCord;
+            var prevCordX;
+            var prevCordY;
             var cord = [];
             var nextTargetX = 0;
             var nextTargetY = 0;
@@ -203,9 +205,9 @@
                 // delaythis(that.pathCounter);
 
                 if (that.pathCounter > 0) {
-                    var prevCord = path[that.pathCounter - 1];
-                    var prevCordX = prevCord[0] * 50;
-                    var prevCordY = prevCord[1] * 50;
+                    prevCord = path[that.pathCounter - 1];
+                    prevCordX = prevCord[0] * 50;
+                    prevCordY = prevCord[1] * 50;
                     //check if x has changed
 
                     if (nextTargetX === prevCordX) {
@@ -248,9 +250,9 @@
                 // delaythis(that.pathCounter);
 
                 if (that.pathCounter < path.length - 1) {
-                    var prevCord = path[that.pathCounter + 1];
-                    var prevCordX = prevCord[0] * 50;
-                    var prevCordY = prevCord[1] * 50;
+                    prevCord = path[that.pathCounter + 1];
+                    prevCordX = prevCord[0] * 50;
+                    prevCordY = prevCord[1] * 50;
                     //check if x has changed
 
                     if (nextTargetX === prevCordX) {
@@ -289,7 +291,6 @@
             that.htmlElement.style.left = that.x + 'px';
             that.htmlElement.style.top = that.y + 'px';
         };
-
     };
 
     // world is a 2d array of integers (eg world[10][15] = 0)
@@ -467,10 +468,10 @@
 
         // returns boolean value (world cell is available and open)
         function canWalkHere(x, y) {
-            return ((world[x] != null) &&
-                (world[x][y] != null) &&
+            return ((world[x] !== null) &&
+                (world[x][y] !== null) &&
                 (world[x][y] <= maxWalkableTileNum));
-        };
+        }
 
         // Node function, returns a new object with Node properties
         // Used in the calculatePath function to store route costs, etc.
@@ -497,11 +498,11 @@
         // Path function, executes AStar algorithm operations
         function calculatePath() {
             // create Nodes from the Start and End x,y coordinates
-            var mypathStart = Node(null, {
+            var mypathStart = new Node(null, {
                 x: pathStart[0],
                 y: pathStart[1]
             });
-            var mypathEnd = Node(null, {
+            var mypathEnd = new Node(null, {
                 x: pathEnd[0],
                 y: pathEnd[1]
             });
@@ -547,10 +548,10 @@
                 } else // not the destination
                 {
                     // find which nearby nodes are walkable
-                    myNeighbours = Neighbours(myNode.x, myNode.y);
+                    myNeighbours = new Neighbours(myNode.x, myNode.y);
                     // test each one that hasn't been tried already
                     for (i = 0, j = myNeighbours.length; i < j; i++) {
-                        myPath = Node(myNode, myNeighbours[i]);
+                        myPath = new Node(myNode, myNeighbours[i]);
                         if (!AStar[myPath.value]) {
                             // estimated cost of this particular route so far
                             myPath.g = myNode.g + distanceFunction(myNeighbours[i], myNode);
@@ -573,28 +574,28 @@
         // this returns an array of coordinates
         // that is empty if no path is possible
         return calculatePath();
-    };
-    
-	function animateTileSprite(element,noOfTiles,intervalTime) {
-		var currentSpriteX = 0;
-		var currentSpriteY = 0; 
-		element.style.backgroundPositionX = currentSpriteX + "px";
-		element.style.backgroundPositionY = currentSpriteY + "px";
-		setInterval(function() {
-		currentSpriteX -= 50;
-		if(currentSpriteX < (-50*noOfTiles)) {
-		currentSpriteX = 0;
-		// currentSpriteY -= 50;
-		}
-		// if(currentSpriteY > (50*0)) {
-		// currentSpriteX = 0;
-		// currentSpriteY = 0;
-		// }
-		element.style.backgroundPositionX = currentSpriteX + "px";
-		// element.style.backgroundPositionY = currentSpriteY + "px";
-		},intervalTime);
-	};
-		
+    }
+
+    function animateTileSprite(element, noOfTiles, intervalTime) {
+        var currentSpriteX = 0;
+        var currentSpriteY = 0;
+        element.style.backgroundPositionX = currentSpriteX + "px";
+        element.style.backgroundPositionY = currentSpriteY + "px";
+        setInterval(function() {
+            currentSpriteX -= 50;
+            if (currentSpriteX < (-50 * noOfTiles)) {
+                currentSpriteX = 0;
+                // currentSpriteY -= 50;
+            }
+            // if(currentSpriteY > (50*0)) {
+            // currentSpriteX = 0;
+            // currentSpriteY = 0;
+            // }
+            element.style.backgroundPositionX = currentSpriteX + "px";
+            // element.style.backgroundPositionY = currentSpriteY + "px";
+        }, intervalTime);
+    }
+
     function GameWorld() {
 
         var that = this;
@@ -609,16 +610,17 @@
         this.explosions = [];
         this.bomb;
         this.explosion;
-		this.loadingScreen = document.getElementById('loading-screen');
-		this.loadingBar = document.getElementById('loading-screen').children[0];
-		this.menuScreen = document.getElementById('menu-screen');
-		this.endScreen = document.getElementById('end-screen');
-		this.result = document.getElementById('end-screen').children[0];
-		this.powerUps=[];
-		this.coins=[];
-		this.score=0;
-		this.scoreDiv.innerHTML = "Score  "+this.score;
-		
+        this.loadingScreen = document.getElementById('loading-screen');
+        this.loadingBar = document.getElementById('loading-screen').children[0];
+        this.menuScreen = document.getElementById('menu-screen');
+        this.endScreen = document.getElementById('end-screen');
+        this.result = document.getElementById('end-screen').children[0];
+        this.scoreBox = document.getElementById('end-screen').children[1];
+        this.powerUps = [];
+        this.coins = [];
+        this.score = 0;
+        this.scoreDiv.innerHTML = "Score  " + this.score;
+
         var level1TileMapInfo = [
             [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3],
             [3, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3],
@@ -640,89 +642,90 @@
             that.bomberMan.init();
             that.htmlElement.appendChild(that.bomberMan.htmlElement);
 
-            var enemy = new Enemy(50, 450,10);
-            enemy.init(2, [1, 9], [4,5]);
+            var enemy = new Enemy(1, 9, 10);
+            enemy.init(2, [1, 9], [4, 5]);
             that.htmlElement.appendChild(enemy.htmlElement);
             that.enemies.push(enemy);
 
-            enemy = new Enemy(450, 450,5);
+            enemy = new Enemy(9, 9, 5);
             enemy.init(1, [9, 9], [6, 3]);
             that.htmlElement.appendChild(enemy.htmlElement);
             that.enemies.push(enemy);
 
-            enemy = new Enemy(450, 50,5);
+            enemy = new Enemy(9, 1, 5);
             enemy.init(1, [9, 1], [1, 4]);
             that.htmlElement.appendChild(enemy.htmlElement);
             that.enemies.push(enemy);
 
-            enemy = new Enemy(450, 250,10);
-            enemy.init(2, [9, 5], [6,9]);
+            enemy = new Enemy(9, 5, 10);
+            enemy.init(2, [9, 5], [6, 9]);
             that.htmlElement.appendChild(enemy.htmlElement);
             that.enemies.push(enemy);
-            
-            enemy = new Enemy(250, 250,5);
-            enemy.init(3, [5, 5], [5,5]);
+
+            enemy = new Enemy(5, 5, 5);
+            enemy.init(3, [5, 5], [5, 5]);
             that.htmlElement.appendChild(enemy.htmlElement);
             that.enemies.push(enemy);
-			
-			var coin = new Coin;
-			coin.init(4,3);
+
+            var coin = new Coin();
+            coin.init(4, 3);
             that.htmlElement.appendChild(coin.htmlElement);
             that.coins.push(coin);
-            
-            coin = new Coin;
-			coin.init(9,2);
+
+            coin = new Coin();
+            coin.init(9, 2);
             that.htmlElement.appendChild(coin.htmlElement);
             that.coins.push(coin);
-            
-            coin = new Coin;
-			coin.init(1,6);
+
+            coin = new Coin();
+            coin.init(1, 6);
             that.htmlElement.appendChild(coin.htmlElement);
             that.coins.push(coin);
-            
-            coin = new Coin;
-			coin.init(6,1);
+
+            coin = new Coin();
+            coin.init(6, 1);
             that.htmlElement.appendChild(coin.htmlElement);
             that.coins.push(coin);
-            
-            coin = new Coin;
-			coin.init(4,9);
+
+            coin = new Coin();
+            coin.init(4, 9);
             that.htmlElement.appendChild(coin.htmlElement);
             that.coins.push(coin);
-            
+
             initKeyEvents();
             this.mainGameLooper = setInterval(mainGameLoop, 100);
         };
 
         // Private Methods
- 		var keyRestrict=1;
+        var keyRestrict = 1;
         var bombLimit = 3;
         var bombActive = false;
         var initKeyEvents = function() {
-            that.bomb = new Bomb;
-            var up=38;
-            var down=40;
-            var left=37;
-            var right=39;
-            var spaceBar=32;
-           
+            that.bomb = new Bomb();
+            var up = 38;
+            var down = 40;
+            var left = 37;
+            var right = 39;
+            var spaceBar = 32;
+
             window.onkeydown = function(event) {
-                if (event.which === right && keyRestrict >0){
+                if (event.which === right && keyRestrict > 0) {
                     that.bomberMan.velocityX = 50;
-                    keyRestrict =0;
+                    animateTileSprite(that.bomberMan.htmlElement, 10, 100);
+                    keyRestrict = 0;
                     return;
                 }
-                if (event.which === left && keyRestrict >0){
+                if (event.which === left && keyRestrict > 0) {
                     that.bomberMan.velocityX = -50;
-                    keyRestrict =0;
+                    keyRestrict = 0;
                 }
-                if (event.which === down && keyRestrict >0){
+                if (event.which === down && keyRestrict > 0) {
                     that.bomberMan.velocityY = 50;
-                    keyRestrict =0;
+                    keyRestrict = 0;
                 }
-                if (event.which === up && keyRestrict >0){
+                if (event.which === up && keyRestrict > 0) {
                     that.bomberMan.velocityY = -50;
-                    keyRestrict =0;
+                    keyRestrict = 0;
                 }
                 if (event.which === spaceBar) {
                     if (bombLimit > 0 && !that.bomb.bombActive) {
@@ -735,111 +738,118 @@
                     }
                 }
             };
-     
-        var  explodeBomb = function() {
-        	that.bomb.htmlElement.remove();
-            createExplosionBoxes(that.bomb.x,that.bomb.y);
-            that.bomb.bombActive = false;
-        }
-            
-        var createExplosionBoxes = function(x,y){
-        	var rightX = x+50;
-        	var rightY = y+0;
-        	var botX = x+0;
-        	var botY = y+50;
-        	var leftX = x-50;
-        	var leftY = y+0;
-        	var topX = x+0;
-        	var topY = y-50;
-        	var midX = x+0;
-        	var midY = y+0;
-        	// debugger;
-        	var bombM = new Explosion();
-        	var bombR = new Explosion();
-        	var bombB = new Explosion();
-        	var bombL = new Explosion();
-        	var bombT = new Explosion();
-        	
-        	bombM.init(midX,midY);
-        	
-        	bombR.init(rightX,rightY);
-        	
-        	bombB.init(botX,botY);
-        	
-        	bombL.init(leftX,leftY);
-        	
-        	bombT.init(topX,topY);
-        	
-        	that.htmlElement.appendChild(bombM.htmlElement);
-        	that.explosions.push(bombM);
-        	bombM.clearExplosion();
-        	
-        	if(allowExplodeCreate(bombR)) {
-    		that.htmlElement.appendChild(bombR.htmlElement);
-    		that.explosions.push(bombR);
-    		bombR.clearExplosion();
-    		}
-    		if(allowExplodeCreate(bombB)) {
-    		that.htmlElement.appendChild(bombB.htmlElement);
-    		that.explosions.push(bombB);
-    		bombB.clearExplosion();
-    		}
-    		if(allowExplodeCreate(bombL)) {
-    		that.htmlElement.appendChild(bombL.htmlElement);
-    		that.explosions.push(bombL);
-    		bombL.clearExplosion();
-    		}
-    		if(allowExplodeCreate(bombT)) {
-    		that.htmlElement.appendChild(bombT.htmlElement);
-    		that.explosions.push(bombT);
-    		bombT.clearExplosion();
-    		}	
-		 	
-		 	for(var i=0; i<that.explosions.length; i++){
-		 		for(var e=0; e<that.enemies.length; e++) {
-		 			if(checkCollision(that.explosions[i], that.enemies[e])) {
-		 				that.enemies[e].kill();
-		 				that.enemies[e] = null;
-		 				updateScore(1);
-		 			}
-		 		}
-		 		that.enemies = cleanNullFromArray(that.enemies);
-		 		
-		 		if(checkCollision(that.explosions[i], that.bomberMan)) {
-		 			displayEndScreen(3);
-		 		}
-		 		
-		 		for(var j=0;j<that.blocks.length;j++){
-		 			if(checkCollision(that.explosions[i],that.blocks[j]) && that.blocks[j].type===2){
-		 				dropPowerUp(that.blocks[j].x,that.blocks[j].y);
-		 				that.blocks[j].kill();
-		 				that.blocks[j] = null;
-		 			}	
-		 		}
-		 		that.blocks = cleanNullFromArray(that.blocks);
-		 	} 
-        };
-        
-        var dropPowerUp=function(x,y){
-        	var powerUp = new PowerUp();
-        	powerUp.init(x,y);
-        	that.htmlElement.appendChild(powerUp.htmlElement);
-        	that.powerUps.push(powerUp);
-        };
-        
-        var allowExplodeCreate = function(explosion) {
-        	for(var i=0; i<that.blocks.length; i++) {
-        		if(checkCollision(explosion, that.blocks[i]) && that.blocks[i].type != 2) {
-        			return false;
-        			} 	
-        	}
-        	return true;
-        };
-     
+
+            var explodeBomb = function() {
+                that.bomb.htmlElement.remove();
+                createExplosionBoxes(that.bomb.x, that.bomb.y);
+                that.bomb.bombActive = false;
+            };
+
+            var createExplosionBoxes = function(x, y) {
+                var rightX = x + 50;
+                var rightY = y + 0;
+                var botX = x + 0;
+                var botY = y + 50;
+                var leftX = x - 50;
+                var leftY = y + 0;
+                var topX = x + 0;
+                var topY = y - 50;
+                var midX = x + 0;
+                var midY = y + 0;
+                // debugger;
+                var bombM = new Explosion();
+                var bombR = new Explosion();
+                var bombB = new Explosion();
+                var bombL = new Explosion();
+                var bombT = new Explosion();
+
+                bombM.init(midX, midY);
+
+                bombR.init(rightX, rightY);
+
+                bombB.init(botX, botY);
+
+                bombL.init(leftX, leftY);
+
+                bombT.init(topX, topY);
+
+                that.htmlElement.appendChild(bombM.htmlElement);
+                that.explosions.push(bombM);
+                bombM.clearExplosion();
+
+                if (allowExplodeCreate(bombR)) {
+                    that.htmlElement.appendChild(bombR.htmlElement);
+                    that.explosions.push(bombR);
+                    bombR.clearExplosion();
+                }
+                if (allowExplodeCreate(bombB)) {
+                    that.htmlElement.appendChild(bombB.htmlElement);
+                    that.explosions.push(bombB);
+                    bombB.clearExplosion();
+                }
+                if (allowExplodeCreate(bombL)) {
+                    that.htmlElement.appendChild(bombL.htmlElement);
+                    that.explosions.push(bombL);
+                    bombL.clearExplosion();
+                }
+                if (allowExplodeCreate(bombT)) {
+                    that.htmlElement.appendChild(bombT.htmlElement);
+                    that.explosions.push(bombT);
+                    bombT.clearExplosion();
+                }
+
+                for (var i = 0; i < that.explosions.length; i++) {
+                    for (var e = 0; e < that.enemies.length; e++) {
+                        if (checkCollision(that.explosions[i], that.enemies[e])) {
+                            that.enemies[e].kill();
+                            that.enemies[e] = null;
+                            var v = setInterval(function() {
+                                that.scoreDiv.style.color = '#8e44ad';
+                                that.scoreDiv.style.fontSize = 20 + 'px';
+                            }, 15);
+                            setTimeout(function() {
+                                clearInterval(v);
+                                that.scoreDiv.style.color = 'black';
+                                that.scoreDiv.style.fontSize = 18 + 'px'
+                            }, 1000);
+                            updateScore(1);
+                        }
+                    }
+                    that.enemies = cleanNullFromArray(that.enemies);
+
+                    for (var j = 0; j < that.blocks.length; j++) {
+                        if (checkCollision(that.explosions[i], that.blocks[j]) && that.blocks[j].type === 2) {
+                            dropPowerUp(that.blocks[j].x, that.blocks[j].y);
+                            that.blocks[j].kill();
+                            that.blocks[j] = null;
+                        }
+                    }
+                    that.blocks = cleanNullFromArray(that.blocks);
+                }
+            };
+
+            var dropPowerUp = function(x, y) {
+                var powerUp = new PowerUp();
+                powerUp.init(x, y);
+                that.htmlElement.appendChild(powerUp.htmlElement);
+                that.powerUps.push(powerUp);
+                setTimeout(powerUp.kill, 5000);
+            };
+
+            var allowExplodeCreate = function(explosion) {
+                for (var i = 0; i < that.blocks.length; i++) {
+                    if (checkCollision(explosion, that.blocks[i]) && that.blocks[i].type !== 2) {
+                        return false;
+                    }
+                }
+                return true;
+            };
+
             window.onkeyup = function(event) {
                 that.bomberMan.velocityX = 0;
                 that.bomberMan.velocityY = 0;
-                keyRestrict=1;
+                animateTileSprite(that.bomberMan.htmlElement, 0, 0);
+                keyRestrict = 1;
             };
 
         };
@@ -858,79 +868,112 @@
                     that.bomberMan.velocityY = 0;
                     that.bomberMan.updatePosition();
                 }
-            }	
-			                
-            for(var i=0; i<that.coins.length; i++){
-	 			if(checkCollision(that.bomberMan,that.coins[i] )) {
-	 				that.coins[i].kill();
-	 				that.coins[i] = null;
-	 				updateScore(2);
-	 		}
-	 		that.coins = cleanNullFromArray(that.coins);
-	 		}
-		 		
-            for (var i = 0; i < that.enemies.length; i++) {
-                that.enemies[i].updatePosition(pathValues(that.enemies[i].pathStart, that.enemies[i].pathEnd));
-                if (checkCollision(that.bomberMan, that.enemies[i])) {
+            }
+
+            for (var k = 0; k < that.coins.length; k++) {
+                if (checkCollision(that.bomberMan, that.coins[k])) {
+                    that.coins[k].kill();
+                    that.coins[k] = null;
+                    var v = setInterval(function() {
+                        that.scoreDiv.style.color = '#f39c12';
+                        that.scoreDiv.style.fontSize = 20 + 'px';
+                    }, 15);
+                    setTimeout(function() {
+                        clearInterval(v);
+                        that.scoreDiv.style.color = 'black';
+                        that.scoreDiv.style.fontSize = 18 + 'px'
+                    }, 1000);
+                    updateScore(2);
+                }
+                that.coins = cleanNullFromArray(that.coins);
+            }
+
+            for (var n = 0; n < that.explosions.length; n++) {
+                if (checkCollision(that.bomberMan, that.explosions[n])) {
+                    displayEndScreen(3);
+                }
+            }
+
+            for (var l = 0; l < that.enemies.length; l++) {
+                that.enemies[l].updatePosition(pathValues(that.enemies[l].pathStart, that.enemies[l].pathEnd));
+                if (checkCollision(that.bomberMan, that.enemies[l])) {
                     clearInterval(that.mainGameLooper);
-                   displayEndScreen(2);
+                    displayEndScreen(2);
                 }
             };
-			
-			for(var i=0; i<that.powerUps.length; i++){
-		 			if(checkCollision(that.powerUps[i], that.bomberMan)){
-		 				that.powerUps[i].kill();
-		 				that.powerUps[i] = null;
-		 				updateScore(2);
-		 				bombLimit++;
-					}
-		 		that.powerUps = cleanNullFromArray(that.powerUps);
-		 		}
+
+            for (var m = 0; m < that.powerUps.length; m++) {
+                if (checkCollision(that.powerUps[m], that.bomberMan)) {
+                    that.powerUps[m].kill();
+                    that.powerUps[m] = null;
+                    var v = setInterval(function() {
+                        that.scoreDiv.style.color = '#3498db';
+                        that.scoreDiv.style.fontSize = 20 + 'px';
+                    }, 15);
+                    setTimeout(function() {
+                        clearInterval(v);
+                        that.scoreDiv.style.color = 'black';
+                        that.scoreDiv.style.fontSize = 18 + 'px'
+                    }, 1000);
+                    updateScore(2);
+                    bombLimit++;
+                }
+                that.powerUps = cleanNullFromArray(that.powerUps);
+            }
             updateBomb();
             checkEnemies();
         };
-        
-		var checkEnemies=function(){
-			if(that.enemies.length===0){
-				displayEndScreen(1);
-			}
-			
-		};
-		
-    var updateScore = function(type){
-		if(type===1){
-    			that.score+=30;
-    		}
-    		if(type===2){
-    			that.score+=10;
-    		}
-    		that.scoreDiv.innerHTML = "Score  "+that.score;
-   	 }
+
+        var checkEnemies = function() {
+            if (that.enemies.length === 0) {
+                displayEndScreen(1);
+            }
+
+        };
+
+        var updateScore = function(type) {
+            if (type === 1) {
+                that.score += 30;
+            }
+            if (type === 2) {
+                that.score += 10;
+            }
+            that.scoreDiv.innerHTML = "Score  " + that.score;
+        }
 
         var cleanNullFromArray = function(array) {
-        	for(var i=0;i<array.length;i++){
-        		if(array[i]===null){
-        			array.splice(i,1);
-        		}	
-        	}
-        	return array;
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] === null) {
+                    array.splice(i, 1);
+                }
+            }
+            return array;
         };
         var updateBomb = function() {
             var bombCount = bombLimit;
             that.scoreBoard.innerHTML = 'Bomb Count  ' + bombCount;
         };
-        var displayEndScreen = function(type){
-        	that.endScreen.style.display = 'block';
-        	that.gameScreen.style.display = 'none';
-        	if(type===1){
-        		that.result.style.background = 'url(images/you-win.png)';
-        	}
-        	if(type===2){
-        		that.result.style.background = 'url(images/game-over.png)';
-        	} 
-        	if(type===3){
-        		that.result.style.background = 'red';
-        	} 		
+
+        var displayEndScreen = function(type) {
+            clearInterval(gameWorld.mainGameLoop);
+            //console.log(scoreBox);
+            var mainMenuBtn = document.getElementById('end-screen').children[2].children[0];
+            var playAgainBtn = document.getElementById('end-screen').children[2].children[1];
+            that.endScreen.style.display = 'block';
+            that.gameScreen.style.display = 'none';
+            if (type === 1) {
+                that.result.style.background = 'url(images/you-win.png)';
+            }
+            if (type === 2) {
+                that.result.style.background = 'url(images/game-over.png)';
+            }
+            if (type === 3) {
+                that.result.style.background = 'url(images/suicide-bomber.png)';
+            }
+            that.scoreBox.innerHTML = that.score;
+            mainMenuBtn.onclick = function() {
+                // displayMenu();
+            }
         };
 
         var pathValues = function(start, end) {
@@ -939,8 +982,8 @@
         };
 
         var checkCollision = function(object1, object2) {
-            if ((object1.x + 49) > object2.x && object1.x <= (object2.x + 49) &&
-                (object1.y + 49) > object2.y && object1.y <= (object2.y + 49)) {
+            if ((object1.x + 45) > object2.x && object1.x < (object2.x + 45) &&
+                (object1.y + 45) > object2.y && object1.y < (object2.y + 45)) {
                 return true;
             } else {
                 return false;
@@ -950,7 +993,7 @@
         var generateTileMap = function(tileMap) {
             for (var i = 0; i < tileMap.length; i++) {
                 for (var j = 0; j < tileMap[i].length; j++) {
-                    if (tileMap[i][j] != 0) {
+                    if (tileMap[i][j] !== 0) {
                         var block = new Block();
                         block.init(tileMap[i][j], i, j);
                         that.blocks.push(block);
@@ -958,40 +1001,38 @@
                     }
                 }
             }
-        };  
-	    this.mainMenu = function(){
-	    	that.menuScreen.onclick=function(){	
-	    		generateLoading();
-    		}
-   		 }
-   		 
-   		 var timer;
-   		 var generateLoading = function(){
-   		 	// setTimeout(generateLoading,2000);
-    		that.loadingScreen.style.display = 'block';
-    		that.menuScreen.style.display = 'none';
-    		timer = setInterval(generateLoadingBar,40);	
-   		 }
-   		 
-   		 var count = 0;
-   		 var update = 0;
-   		 var barLeft = -590;
-   		 var generateLoadingBar = function(){
-   		 	update =update+1;
-   		 	barLeft = barLeft+update;
-   		 	that.loadingBar.style.left=barLeft+'px';
-   		 	if(update>30)
-   		 	{
-   		 		clearInterval(timer);
-				gameWorld.init();
-   		 		that.loadingScreen.style.display = 'none';
-   		 		that.gameScreen.style.display = 'block';
-   		 		// clearInterval(that.timer);
-   		 	}
-   		 }
+        };
+
+        this.mainMenu = function() {
+            that.menuScreen.onclick = function() {
+                generateLoading();
+            }
+        }
+
+        var timer;
+        var generateLoading = function() {
+            that.loadingScreen.style.display = 'block';
+            that.menuScreen.style.display = 'none';
+            timer = setInterval(generateLoadingBar, 40);
+        }
+
+        var count = 0;
+        var update = 0;
+        var barLeft = -590;
+        var generateLoadingBar = function() {
+            update = update + 1;
+            barLeft = barLeft + update;
+            that.loadingBar.style.left = barLeft + 'px';
+            if (update > 30) {
+                clearInterval(timer);
+                that.init();
+                that.loadingScreen.style.display = 'none';
+                that.gameScreen.style.display = 'block';
+            }
+        }
     };
 
-	var gameWorld = new GameWorld();
+    var gameWorld = new GameWorld();
     gameWorld.mainMenu();
 
 })();

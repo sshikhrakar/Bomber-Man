@@ -5,30 +5,36 @@
 	margin: 0;
 	padding: 0;
 	font-family: calibri;
+	font-weight:bold;
+	font-size:18px;
 }
 .bomberman {
 	position: absolute;
 	height: 50px;
 	width: 50px;
-	background: url('../images/hero.png');
+	background: url('../images/hero-sprite.png');
+	z-index:1002;
 }
 .gunda1 {
 	position: absolute;
 	height: 50px;
 	width: 50px;
 	background: url('../images/slime-sprite.png');
+	z-index:1001;
 }
 .gunda2 {
 	position: absolute;
 	height: 50px;
 	width: 50px;
 	background: url('../images/fly_fly_sprite.png');
+	z-index:1001;
 }
 .gunda3 {
 	position: absolute;
 	height: 50px;
 	width: 50px;
 	background: url('../images/mine.png');
+	z-index:1001;
 }
 .coin{
 	position: absolute;
@@ -67,6 +73,7 @@
 	height: 50px;
 	width: 50px;
 	background: url('../images/bomb.png');
+	z-index:1000;
 }
 .explosion{
 	position:absolute;
@@ -79,7 +86,7 @@
 	height:40px;
 	float:left;
 	margin-right:10px;
-	padding-left:4px;
+	text-align:center;
 }
 .bombLimit{
 	width:166px;
@@ -87,14 +94,14 @@
 	float:left;
 	margin-left:10px;
 	margin-right:10px;
-	padding-left:4px;
+	text-align:center;
 }
 .score{
 	width:166px;
 	height:40px;
 	float:left;
 	margin-left:10px;
-	padding-left:4px;
+	text-align:center;
 }
 #end-screen{
 	width:550px;
@@ -111,12 +118,56 @@
 	width:224px;
 	height:67px;
 }
+.scoreBoard{
+	left:92px;
+	top:209px;
+	width:365px;
+	height:241px;
+	position:absolute;
+	text-align:center;
+	line-height:241px;
+	color:#2980b9;
+	font-size:36px;
+	background:url('../images/scoreBoard.png');	
+}
+.endButtons{
+	top:498px;
+	left:92px;
+	width:365px;
+	height:53px;
+	position:absolute;
+	clear:both;
+}
+.leftButton{
+	float:left;
+	width:177px;
+	height:53px;
+	background:url('../images/main-menu.png');
+}
+.leftButton:hover {
+	cursor:pointer;
+	background:url('../images/main-menu-hover.png');
+}
+.rightButton{
+	float:right;
+	width:177px;
+	height:53px;
+	background:url('../images/play-again.png');
+}
+.rightButton:hover {
+	cursor:pointer;
+	background:url('../images/play-again-hover.png');
+}
 #scoreBar {
 	width: 550px;
 	height: 50px;
 	line-height: 50px;
 	background: url('../images/score-board.png');
 	float: left;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
 }
 #main-screen {
 	width: 550px;
