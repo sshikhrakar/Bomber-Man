@@ -144,7 +144,7 @@
             that.htmlElement.className = "explosion";
             that.htmlElement.style.left = that.x + 'px';
             that.htmlElement.style.top = that.y + 'px';
-            animateTileSprite(that.htmlElement, 31, 50);
+            animateTileSprite(that.htmlElement, 31, 100);
         };
         this.clearExplosion = function() {
             setTimeout(clearAll, 100);
