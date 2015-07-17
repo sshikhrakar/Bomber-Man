@@ -144,10 +144,10 @@
             that.htmlElement.className = "explosion";
             that.htmlElement.style.left = that.x + 'px';
             that.htmlElement.style.top = that.y + 'px';
-            animateTileSprite(that.htmlElement, 31, 100);
+            animateTileSprite(that.htmlElement, 31, 50);
         };
         this.clearExplosion = function() {
-            setTimeout(clearAll, 100);
+            setTimeout(clearAll,800);
         };
 
         var clearAll = function() {
@@ -816,7 +816,12 @@
                         }
                     }
                     that.enemies = cleanNullFromArray(that.enemies);
-
+					
+					
+                if (checkCollision(that.bomberMan, that.explosions[i])) {
+                    displayEndScreen(3);
+                }
+					
                     for (var j = 0; j < that.blocks.length; j++) {
                         if (checkCollision(that.explosions[i], that.blocks[j]) && that.blocks[j].type === 2) {
                             dropPowerUp(that.blocks[j].x, that.blocks[j].y);
@@ -888,11 +893,6 @@
                 that.coins = cleanNullFromArray(that.coins);
             }
 
-            for (var n = 0; n < that.explosions.length; n++) {
-                if (checkCollision(that.bomberMan, that.explosions[n])) {
-                    displayEndScreen(3);
-                }
-            }
 
             for (var l = 0; l < that.enemies.length; l++) {
                 that.enemies[l].updatePosition(pathValues(that.enemies[l].pathStart, that.enemies[l].pathEnd));
@@ -1031,6 +1031,35 @@
             }
         }
     };
+
+// fade out
+
+function fadeOut(el){
+  el.style.opacity = 1;
+
+  (function fade() {
+    if ((el.style.opacity -= .1) < 0) {
+      el.style.display = "none";
+    } else {
+      requestAnimationFrame(fade);
+    }
+  })();
+}
+
+// fade in
+
+function fadeIn(el, display){
+  el.style.opacity = 0;
+  el.style.display = display || "block";
+
+  (function fade() {
+    var val = parseFloat(el.style.opacity);
+    if (!((val += .1) > 1)) {
+      el.style.opacity = val;
+      requestAnimationFrame(fade);
+    }
+  })();
+}
 
     var gameWorld = new GameWorld();
     gameWorld.mainMenu();
