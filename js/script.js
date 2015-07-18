@@ -103,7 +103,11 @@
             that.htmlElement.style.left = that.x + 'px';
             that.htmlElement.style.top = that.y + 'px';
         };
-
+		
+		this.kill = function() {
+            that.htmlElement.remove();
+        };
+        
         this.updatePosition = function() {
             if (that.x < 50) {
                 that.velocityX = 0;
@@ -144,10 +148,10 @@
             that.htmlElement.className = "explosion";
             that.htmlElement.style.left = that.x + 'px';
             that.htmlElement.style.top = that.y + 'px';
-            animateTileSprite(that.htmlElement, 31, 50);
+            animateTileSprite(that.htmlElement, 31, 15);
         };
         this.clearExplosion = function() {
-            setTimeout(clearAll,800);
+            setTimeout(clearAll,500);
         };
 
         var clearAll = function() {
@@ -603,6 +607,7 @@
         this.scoreBoard = document.getElementById('scoreBar').children[1];
         this.scoreDiv = document.getElementById('scoreBar').children[2];
         this.gameScreen = document.getElementById('game-screen');
+        this.announcer = document.getElementById('game-screen').children[0];
         this.mainGameLooper;
         this.bomberMan;
         this.enemies = [];
@@ -809,7 +814,7 @@
                             }, 15);
                             setTimeout(function() {
                                 clearInterval(v);
-                                that.scoreDiv.style.color = 'black';
+                                that.scoreDiv.style.color = '#2980b9';
                                 that.scoreDiv.style.fontSize = 18 + 'px'
                             }, 1000);
                             updateScore(1);
@@ -819,6 +824,7 @@
 					
 					
                 if (checkCollision(that.bomberMan, that.explosions[i])) {
+                	that.bomberMan.kill();
                     displayEndScreen(3);
                 }
 					
@@ -879,14 +885,16 @@
                 if (checkCollision(that.bomberMan, that.coins[k])) {
                     that.coins[k].kill();
                     that.coins[k] = null;
+                    fadeIn(that.announcer);
                     var v = setInterval(function() {
                         that.scoreDiv.style.color = '#f39c12';
                         that.scoreDiv.style.fontSize = 20 + 'px';
                     }, 15);
                     setTimeout(function() {
                         clearInterval(v);
-                        that.scoreDiv.style.color = 'black';
-                        that.scoreDiv.style.fontSize = 18 + 'px'
+                        that.scoreDiv.style.color = '#2980b9';
+                        that.scoreDiv.style.fontSize = 18 + 'px';
+                       	fadeOut(that.announcer);
                     }, 1000);
                     updateScore(2);
                 }
@@ -898,6 +906,9 @@
                 that.enemies[l].updatePosition(pathValues(that.enemies[l].pathStart, that.enemies[l].pathEnd));
                 if (checkCollision(that.bomberMan, that.enemies[l])) {
                     clearInterval(that.mainGameLooper);
+                    that.bomberMan.kill();
+                    // fadeIn(that.announcer);
+                    // console.log(that.announcer);
                     displayEndScreen(2);
                 }
             };
@@ -912,7 +923,7 @@
                     }, 15);
                     setTimeout(function() {
                         clearInterval(v);
-                        that.scoreDiv.style.color = 'black';
+                        that.scoreDiv.style.color = '#2980b9';
                         that.scoreDiv.style.fontSize = 18 + 'px'
                     }, 1000);
                     updateScore(2);
@@ -959,8 +970,11 @@
             //console.log(scoreBox);
             var mainMenuBtn = document.getElementById('end-screen').children[2].children[0];
             var playAgainBtn = document.getElementById('end-screen').children[2].children[1];
-            that.endScreen.style.display = 'block';
-            that.gameScreen.style.display = 'none';
+            setTimeout(function(){
+	            fadeOut(that.gameScreen);
+	        	fadeIn(that.endScreen);
+            },1000)
+            
             if (type === 1) {
                 that.result.style.background = 'url(images/you-win.png)';
             }
@@ -1011,8 +1025,10 @@
 
         var timer;
         var generateLoading = function() {
-            that.loadingScreen.style.display = 'block';
-            that.menuScreen.style.display = 'none';
+        	fadeOut(that.menuScreen);
+        	fadeIn(that.loadingScreen);
+            // that.loadingScreen.style.display = 'block';
+            // that.menuScreen.style.display = 'none';
             timer = setInterval(generateLoadingBar, 40);
         }
 
@@ -1038,7 +1054,7 @@ function fadeOut(el){
   el.style.opacity = 1;
 
   (function fade() {
-    if ((el.style.opacity -= .1) < 0) {
+    if ((el.style.opacity -= .04) < 0) {
       el.style.display = "none";
     } else {
       requestAnimationFrame(fade);
@@ -1054,7 +1070,7 @@ function fadeIn(el, display){
 
   (function fade() {
     var val = parseFloat(el.style.opacity);
-    if (!((val += .1) > 1)) {
+    if (!((val += .04) > 1)) {
       el.style.opacity = val;
       requestAnimationFrame(fade);
     }

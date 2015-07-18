@@ -106,9 +106,9 @@
 #end-screen{
 	width:550px;
 	height:600px;
+	position:absolute;
+	top:0;
 	display:none;
-	overflow:hidden;
-	position:relative;
 	background:url('../images/bg_main.png');
 }
 .result{
@@ -117,6 +117,16 @@
 	top:124px;
 	width:224px;
 	height:67px;
+}
+.result1{
+	position:absolute;
+	left:163px;
+	top:124px;
+	width:177px;
+	z-index:1005;
+	display:none;
+	height:53px;
+	background:url('../images/announcer10.png');
 }
 .scoreBoard{
 	left:92px;
@@ -162,6 +172,7 @@
 	width: 550px;
 	height: 50px;
 	line-height: 50px;
+	color:#2980b9;
 	background: url('../images/score-board.png');
 	float: left;
 	-webkit-transition: all 0.3s ease;
@@ -227,8 +238,9 @@
 #game-screen{
 	width:550px;
 	height:600px;
-	display:table;
+	clear:both;
 	display:none;
+	position:relative;
 }
 #wrapper {
 	width: 550px;
