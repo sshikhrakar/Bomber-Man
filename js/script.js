@@ -703,7 +703,7 @@
 
         // Private Methods
         var keyRestrict = 1;
-        var bombLimit = 3;
+        var bombLimit = 10;
         var bombActive = false;
         var initKeyEvents = function() {
             that.bomb = new Bomb();
@@ -837,6 +837,7 @@
                     }
                     that.blocks = cleanNullFromArray(that.blocks);
                 }
+                that.explosions=[];
             };
 
             var dropPowerUp = function(x, y) {
@@ -935,13 +936,6 @@
             checkEnemies();
         };
 
-        var checkEnemies = function() {
-            if (that.enemies.length === 0) {
-                displayEndScreen(1);
-            }
-
-        };
-
         var updateScore = function(type) {
             if (type === 1) {
                 that.score += 30;
@@ -966,7 +960,7 @@
         };
 
         var displayEndScreen = function(type) {
-            clearInterval(gameWorld.mainGameLoop);
+            clearInterval(that.mainGameLooper);
             //console.log(scoreBox);
             var mainMenuBtn = document.getElementById('end-screen').children[2].children[0];
             var playAgainBtn = document.getElementById('end-screen').children[2].children[1];
@@ -1004,6 +998,12 @@
             }
         };
 
+        var checkEnemies = function() {
+            if (that.enemies.length === 0) {
+                displayEndScreen(1);
+            }
+        };
+        
         var generateTileMap = function(tileMap) {
             for (var i = 0; i < tileMap.length; i++) {
                 for (var j = 0; j < tileMap[i].length; j++) {
