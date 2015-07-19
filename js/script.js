@@ -158,7 +158,30 @@
             that.htmlElement.remove();
         }
     }
+	function Announcer(){
+		 var that = this;
 
+        this.htmlElement = document.createElement('div');
+
+		this.init = function(type){
+			that.htmlElement.className = "result1";
+			if(type===1){
+				that.htmlElement.style.background='url(images/announcer10.png)';
+			}
+			if(type===2){
+				that.htmlElement.style.background='url(images/announcer30.png)';
+			}
+			if(type===3){
+				that.htmlElement.style.background='url(images/announcer-bomb.png)';
+			}
+			if(type===4){
+				that.htmlElement.style.background='url(images/announcer-kia.png)';
+			}
+			if(type===5){
+				that.htmlElement.style.background='url(images/announcer-suicide.png)';
+			}
+		}
+	}
     function Enemy(x, y, speed) {
         var that = this;
 
@@ -579,7 +602,32 @@
         // that is empty if no path is possible
         return calculatePath();
     }
-
+	
+	
+	function fadeOut(el){
+	  el.style.opacity = 1;
+	
+	  (function fade() {
+	    if ((el.style.opacity -= .04) < 0) {
+	      el.style.display = "none";
+	    } else {
+	      requestAnimationFrame(fade);
+	    }
+	  })();
+	}
+	
+	function fadeIn(el, display){
+	  el.style.opacity = 0;
+	  el.style.display = display || "block";
+	
+	  (function fade() {
+	    var val = parseFloat(el.style.opacity);
+	    if (!((val += .04) > 1)) {
+	      el.style.opacity = val;
+	      requestAnimationFrame(fade);
+	    }
+	  })();
+	}
     function animateTileSprite(element, noOfTiles, intervalTime) {
         var currentSpriteX = 0;
         var currentSpriteY = 0;
@@ -604,10 +652,10 @@
 
         var that = this;
         this.htmlElement = document.getElementById('main-screen');
-        this.scoreBoard = document.getElementById('scoreBar').children[1];
-        this.scoreDiv = document.getElementById('scoreBar').children[2];
+        this.scoreBoard = document.getElementById('scoreBar').children[2];
+        this.scoreDiv = document.getElementById('scoreBar').children[3];
         this.gameScreen = document.getElementById('game-screen');
-        this.announcer = document.getElementById('game-screen').children[0];
+        // this.announcer = document.getElementById('game-screen').children[0];
         this.mainGameLooper;
         this.bomberMan;
         this.enemies = [];
@@ -624,7 +672,7 @@
         this.powerUps = [];
         this.coins = [];
         this.score = 0;
-        this.scoreDiv.innerHTML = "Score  " + this.score;
+        this.scoreDiv.innerHTML =this.score;
 
         var level1TileMapInfo = [
             [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3],
@@ -696,14 +744,16 @@
             coin.init(4, 9);
             that.htmlElement.appendChild(coin.htmlElement);
             that.coins.push(coin);
+			
 
+			
             initKeyEvents();
             this.mainGameLooper = setInterval(mainGameLoop, 100);
         };
 
         // Private Methods
         var keyRestrict = 1;
-        var bombLimit = 10;
+        var bombLimit = 3;
         var bombActive = false;
         var initKeyEvents = function() {
             that.bomb = new Bomb();
@@ -808,6 +858,10 @@
                         if (checkCollision(that.explosions[i], that.enemies[e])) {
                             that.enemies[e].kill();
                             that.enemies[e] = null;
+                            var announce3= new Announcer();
+                    		announce3.init(2);
+                   			var enemyEaten = that.htmlElement.appendChild(announce3.htmlElement);
+                    		fadeIn(enemyEaten);
                             var v = setInterval(function() {
                                 that.scoreDiv.style.color = '#8e44ad';
                                 that.scoreDiv.style.fontSize = 20 + 'px';
@@ -815,7 +869,8 @@
                             setTimeout(function() {
                                 clearInterval(v);
                                 that.scoreDiv.style.color = '#2980b9';
-                                that.scoreDiv.style.fontSize = 18 + 'px'
+                                that.scoreDiv.style.fontSize = 18 + 'px';
+                                fadeOut(enemyEaten);
                             }, 1000);
                             updateScore(1);
                         }
@@ -825,7 +880,14 @@
 					
                 if (checkCollision(that.bomberMan, that.explosions[i])) {
                 	that.bomberMan.kill();
-                    displayEndScreen(3);
+                	var announce4= new Announcer();
+            		announce4.init(5);
+           			var selfEaten = that.htmlElement.appendChild(announce4.htmlElement);
+            		fadeIn(selfEaten);
+                    setTimeout(function(){
+                    	displayEndScreen(3);
+                    	fadeOut(selfEaten);
+                    	},1000);
                 }
 					
                     for (var j = 0; j < that.blocks.length; j++) {
@@ -886,7 +948,10 @@
                 if (checkCollision(that.bomberMan, that.coins[k])) {
                     that.coins[k].kill();
                     that.coins[k] = null;
-                    fadeIn(that.announcer);
+                    var announce= new Announcer();
+                    announce.init(1);
+                    var coinEaten = that.htmlElement.appendChild(announce.htmlElement);
+                    fadeIn(coinEaten);
                     var v = setInterval(function() {
                         that.scoreDiv.style.color = '#f39c12';
                         that.scoreDiv.style.fontSize = 20 + 'px';
@@ -895,7 +960,7 @@
                         clearInterval(v);
                         that.scoreDiv.style.color = '#2980b9';
                         that.scoreDiv.style.fontSize = 18 + 'px';
-                       	fadeOut(that.announcer);
+                       	fadeOut(coinEaten);
                     }, 1000);
                     updateScore(2);
                 }
@@ -908,9 +973,14 @@
                 if (checkCollision(that.bomberMan, that.enemies[l])) {
                     clearInterval(that.mainGameLooper);
                     that.bomberMan.kill();
-                    // fadeIn(that.announcer);
-                    // console.log(that.announcer);
-                    displayEndScreen(2);
+                    var announce5= new Announcer();
+            		announce5.init(4);
+           			var gotEaten = that.htmlElement.appendChild(announce5.htmlElement);
+            		fadeIn(gotEaten);
+                    setTimeout(function(){
+                    	displayEndScreen(2);
+                    	fadeOut(gotEaten);
+                    	},1000);
                 }
             };
 
@@ -918,6 +988,10 @@
                 if (checkCollision(that.powerUps[m], that.bomberMan)) {
                     that.powerUps[m].kill();
                     that.powerUps[m] = null;
+                    var announce2= new Announcer();
+                    announce2.init(3);
+                    var powerEaten = that.htmlElement.appendChild(announce2.htmlElement);
+                    fadeIn(powerEaten);
                     var v = setInterval(function() {
                         that.scoreDiv.style.color = '#3498db';
                         that.scoreDiv.style.fontSize = 20 + 'px';
@@ -925,7 +999,8 @@
                     setTimeout(function() {
                         clearInterval(v);
                         that.scoreDiv.style.color = '#2980b9';
-                        that.scoreDiv.style.fontSize = 18 + 'px'
+                        that.scoreDiv.style.fontSize = 18 + 'px';
+                        fadeOut(powerEaten);
                     }, 1000);
                     updateScore(2);
                     bombLimit++;
@@ -943,7 +1018,7 @@
             if (type === 2) {
                 that.score += 10;
             }
-            that.scoreDiv.innerHTML = "Score  " + that.score;
+            that.scoreDiv.innerHTML =that.score;
         }
 
         var cleanNullFromArray = function(array) {
@@ -956,7 +1031,7 @@
         };
         var updateBomb = function() {
             var bombCount = bombLimit;
-            that.scoreBoard.innerHTML = 'Bomb Count  ' + bombCount;
+            that.scoreBoard.innerHTML = 'X ' + bombCount;
         };
 
         var displayEndScreen = function(type) {
@@ -1048,34 +1123,6 @@
         }
     };
 
-// fade out
-
-function fadeOut(el){
-  el.style.opacity = 1;
-
-  (function fade() {
-    if ((el.style.opacity -= .04) < 0) {
-      el.style.display = "none";
-    } else {
-      requestAnimationFrame(fade);
-    }
-  })();
-}
-
-// fade in
-
-function fadeIn(el, display){
-  el.style.opacity = 0;
-  el.style.display = display || "block";
-
-  (function fade() {
-    var val = parseFloat(el.style.opacity);
-    if (!((val += .04) > 1)) {
-      el.style.opacity = val;
-      requestAnimationFrame(fade);
-    }
-  })();
-}
 
     var gameWorld = new GameWorld();
     gameWorld.mainMenu();
