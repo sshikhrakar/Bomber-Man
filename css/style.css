@@ -81,19 +81,23 @@
 	width:50px;
 	background:url('../images/explosion_sprite.png');
 }
-.goBack{
+.go-back{
 	width:166px;
 	height:40px;
 	float:left;
 	margin-right:10px;
 	text-align:center;
 }
-#scoreBar img{
+.go-back:hover{
+	cursor: pointer;
+	color:#f1c40f;
+}
+.score-bar img{
 	width:50px;
 	height:50px;
 	margin-left:10px;
 	float:left;
-	
+
 }
 .bombLimit{
 	width:83px;
@@ -142,7 +146,7 @@
 	line-height:241px;
 	color:#2980b9;
 	font-size:36px;
-	background:url('../images/scoreBoard.png');	
+	background:url('../images/scoreBoard.png');
 }
 .endButtons{
 	top:498px;
@@ -172,7 +176,7 @@
 	cursor:pointer;
 	background:url('../images/play-again-hover.png');
 }
-#scoreBar {
+.score-bar {
 	width: 550px;
 	height: 50px;
 	line-height: 50px;
@@ -184,7 +188,7 @@
 	-o-transition: all 0.3s ease;
 	-ms-transition: all 0.3s ease;
 }
-#main-screen {
+.main-screen {
 	width: 550px;
 	height: 550px;
 	background: url('../images/bg.png') repeat;
@@ -223,7 +227,7 @@
 	left:-590px;
 	background:url('../images/loading-bar.png');
 }
-#menu-screen{
+.home-screen{
 	width:550px;
 	height:600px;
 	position:absolute;
@@ -231,7 +235,7 @@
 	overflow:hidden;
 	background:url('../images/menuscreen.png');
 }
-#loading-screen{
+.loading-screen{
 	width:550px;
 	height:600px;
 	overflow:hidden;
@@ -239,14 +243,14 @@
 	position:relative;
 	background:url('../images/loading-screen.png');
 }
-#game-screen{
+.game-screen{
 	width:550px;
 	height:600px;
 	clear:both;
 	display:none;
 	position:relative;
 }
-#wrapper {
+.wrapper {
 	width: 550px;
 	margin: 0 auto;
 	display: table;
